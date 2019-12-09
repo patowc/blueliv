@@ -1,2 +1,3 @@
 # blueliv
-Blueliv Python3 API encapsulation
+This is Blueliv's Python3 API encapsulation.
+
