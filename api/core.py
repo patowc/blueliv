@@ -60,10 +60,6 @@ class BluelivRequest(BASERequestModel):
             raise Exception('[%s]: Exception with error code [%s]' % (url,
                                                                       str(r.status_code)))
 
-    def iocs_types(self):
-        results = self.request(resource=self._iocs_types_url)
-        return results
-
 
 class BluelivUser(BASEModel):
     user_id = None
@@ -94,49 +90,3 @@ class BluelivUser(BASEModel):
 
         super().__init__()
 
-
-BluelivIOCTypes = (
-    (0, 'HASH'),
-    (1, 'IPv4'),
-    (2, 'URL'),
-    (3, 'CVE'),
-    (4, 'DOMAIN'),
-    (5, 'HOST')
-)
-
-BluelivIOCSubtypes = (
-    (0, 'Hash-MD5'),
-    (1, 'Hash-SHA1'),
-    (2, 'Hash-SHA256'),
-    (3, 'Hash-SHA512')
-)
-
-
-class BluelivIOC(BASEModel):
-    spark_id = None
-    ioc_id = None
-    content = None
-    ioc_type = None
-    ioc_subtype = None
-    created_at = None
-
-    def __init__(self, *args, **kwargs):
-        if 'spark_id' in kwargs:
-            self.spark_id = kwargs.get('spark_id', None)
-
-        if 'ioc_id' in kwargs:
-            self.ioc_id = kwargs.get('ioc_id', None)
-
-        if 'content' in kwargs:
-            self.content = kwargs.get('content', None)
-
-        if 'ioc_type' in kwargs:
-            self.ioc_type = kwargs.get('ioc_type', None)
-
-        if 'ioc_subtype' in kwargs:
-            self.ioc_subtype = kwargs.get('ioc_subtype', None)
-
-        if 'created_at' in kwargs:
-            self.created_at = kwargs.get('created_at', None)
-
-        super().__init__()
