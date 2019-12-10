@@ -32,6 +32,9 @@ class SparksRequest(BluelivRequest):
     since_id = None
 
     def __init__(self, *args, **kwargs):
+        if 'token' in kwargs:
+            self._custom_token = kwargs.get('token', None)
+
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/sparks')
         else:
@@ -58,7 +61,7 @@ class SparksRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.limit = kwargs.get('since_id', None)
 
-        super().__init__()
+        super().__init__(token=self._custom_token)
 
     def get(self, spark_id):
         resource_url = '%s/%s' % (self._base_url, spark_id)
