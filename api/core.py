@@ -1,4 +1,4 @@
-from configuration import *
+from .. import configuration
 import requests
 import json
 
@@ -24,9 +24,9 @@ class BluelivRequest(BASERequestModel):
     request_count = 0
 
     def __init__(self):
-        self._url = BASE_API_URL
-        self._authorization_header = AUTHORIZATION_HEADER
-        self._authorization_value = AUTHORIZATION
+        self._url = configuration.BASE_API_URL
+        self._authorization_header = configuration.AUTHORIZATION_HEADER
+        self._authorization_value = configuration.AUTHORIZATION
         self._headers = {self._authorization_header: self._authorization_value}
 
     def _increment_count(self):
