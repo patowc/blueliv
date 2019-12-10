@@ -1,5 +1,5 @@
 import json
-from configuration import *
+from .. import configuration
 from .core import BASEModel, BluelivRequest
 
 
@@ -60,7 +60,7 @@ class IocsRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/iocs')
         else:
-            self._base_url = BASE_IOCS_URL
+            self._base_url = configuration.BASE_IOCS_URL
 
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
