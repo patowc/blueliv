@@ -76,10 +76,6 @@ class BluelivRequest(BASERequestModel):
                                                                       str(r.status_code)))
 
 
-myobj = {'somekey': 'somevalue'}
-
-x = requests.post(url, data = myobj)
-
 class BluelivUser(BASEModel):
     user_id = None
     username = None
