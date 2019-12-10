@@ -20,6 +20,7 @@ class BluelivRequest(BASERequestModel):
     _authorization_header = 'Authorization'
     _authorization_value = 'Token invalid-token'
     _headers = {}
+    _iocs_types_url = None
     last_response = None
     request_count = 0
 
@@ -28,6 +29,7 @@ class BluelivRequest(BASERequestModel):
         self._authorization_header = AUTHORIZATION_HEADER
         self._authorization_value = AUTHORIZATION
         self._headers = {self._authorization_header: self._authorization_value}
+        self._iocs_types_url = BASE_SPARKS_IOCS_TYPES_URL
 
     def _increment_count(self):
         self.request_count += 1
@@ -58,6 +60,10 @@ class BluelivRequest(BASERequestModel):
             raise Exception('[%s]: Exception with error code [%s]' % (url,
                                                                       str(r.status_code)))
 
+    def iocs_types(self):
+        results = self.request(resource=self._iocs_types_url)
+        return results
+
 
 class BluelivUser(BASEModel):
     user_id = None
@@ -87,6 +93,23 @@ class BluelivUser(BASEModel):
             self.last_name = kwargs.get('badge', None)
 
         super().__init__()
+
+
+BluelivIOCTypes = (
+    (0, 'HASH'),
+    (1, 'IPv4'),
+    (2, 'URL'),
+    (3, 'CVE'),
+    (4, 'DOMAIN'),
+    (5, 'HOST')
+)
+
+BluelivIOCSubtypes = (
+    (0, 'Hash-MD5'),
+    (1, 'Hash-SHA1'),
+    (2, 'Hash-SHA256'),
+    (3, 'Hash-SHA512')
+)
 
 
 class BluelivIOC(BASEModel):
