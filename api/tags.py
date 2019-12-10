@@ -52,3 +52,37 @@ class TagsRequest(BluelivRequest):
     def list(self):
         results = self.request(resource=self._base_url)
         return results
+
+    def list_sparks(self, tag_slug, limit=None, since_id=None):
+        params = {}
+        resource_url = '%s/%s%s' % (self._base_url,
+                                    tag_slug,
+                                    self._tags_sparks_url)
+
+        if since_id:
+            params['since_id'] = since_id
+
+        if limit:
+            params['limit'] = limit
+
+        results = self.request(resource=resource_url,
+                               params=params)
+
+        return results
+
+    def list_iocs(self, tag_slug, limit=None, since_id=None):
+        params = {}
+        resource_url = '%s/%s%s' % (self._base_url,
+                                    tag_slug,
+                                    self._tags_iocs_url)
+
+        if since_id:
+            params['since_id'] = since_id
+
+        if limit:
+            params['limit'] = limit
+
+        results = self.request(resource=resource_url,
+                               params=params)
+
+        return results
