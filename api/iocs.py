@@ -57,6 +57,9 @@ class IocsRequest(BluelivRequest):
     since_id = None
 
     def __init__(self, *args, **kwargs):
+        if 'token' in kwargs:
+            self._custom_token = kwargs.get('token', None)
+
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/iocs')
         else:
@@ -68,7 +71,7 @@ class IocsRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.limit = kwargs.get('since_id', None)
 
-        super().__init__()
+        super().__init__(token=self._custom_token)
 
     def iocs_types(self):
         resource = '%s%s' % (self._base_url,
