@@ -1,5 +1,5 @@
 import json
-from configuration import *
+from .. import configuration
 from .core import BASEModel, BluelivRequest
 
 
@@ -35,22 +35,22 @@ class SparksRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/sparks')
         else:
-            self._base_url = BASE_SPARKS_URL
+            self._base_url = configuration.BASE_SPARKS_URL
 
         if 'timeline' in kwargs:
             self._timeline_url = kwargs.get('timeline', '/timeline')
         else:
-            self._timeline_url = BASE_SPARKS_TIMELINE_URL
+            self._timeline_url = configuration.BASE_SPARKS_TIMELINE_URL
 
         if 'discover' in kwargs:
             self._discover_url = kwargs.get('discover', '/discover')
         else:
-            self._discover_url = BASE_SPARKS_DISCOVER_URL
+            self._discover_url = configuration.BASE_SPARKS_DISCOVER_URL
 
         if 'iocs' in kwargs:
             self._sparks_iocs_url = kwargs.get('iocs', '/iocs')
         else:
-            self._sparks_iocs_url = BASE_SPARKS_IOCS_URL
+            self._sparks_iocs_url = configuration.BASE_SPARKS_IOCS_URL
 
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
