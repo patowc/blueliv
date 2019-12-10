@@ -21,6 +21,7 @@ class BluelivRequest(BASERequestModel):
     _authorization_header = 'Authorization'
     _authorization_value = 'Token invalid-token'
     _headers = {}
+    _last_url_invoked = None
     last_response = None
     request_count = 0
 
@@ -53,6 +54,7 @@ class BluelivRequest(BASERequestModel):
         if resource:
             url = '%s%s' % (url,
                             resource)
+        self._last_url_invoked = url
 
         if not params:
             if POST is False:
