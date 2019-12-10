@@ -1,5 +1,6 @@
 from configuration import *
 import requests
+import json
 
 
 class BASEModel:
@@ -50,9 +51,9 @@ class BluelivRequest(BASERequestModel):
         if r.status_code == 200:
             result = r.json()
             if result:
-                return result
+                return json.dumps(result)
             else:
-                return 'NONE'
+                return None
         else:
             raise Exception('Exception with error code [%s]' % str(r.status_code))
 
