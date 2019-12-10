@@ -1,4 +1,4 @@
-from collections import OrderedDict
+import json
 from configuration import *
 from .core import BASEModel, BluelivRequest
 
@@ -28,7 +28,6 @@ class SparksRequest(BluelivRequest):
     _timeline_url = '/timeline'
     _discover_url = '/discover'
     _iocs_url = '/iocs'
-    as_json = True
     limit = None
     since_id = None
 
@@ -59,12 +58,9 @@ class SparksRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.limit = kwargs.get('since_id', None)
 
-        if 'as_json' in kwargs:
-            self.as_json = kwargs.get('as_json', False)
-
         super().__init__()
 
-    def timeline(self, limit=None, since_id=None, as_json=None):
+    def timeline(self, limit=None, since_id=None):
         params = {}
         resource_url = '%s%s' % (self._base_url,
                                  self._timeline_url)
