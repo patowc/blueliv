@@ -55,7 +55,8 @@ class BluelivRequest(BASERequestModel):
             else:
                 return None
         else:
-            raise Exception('Exception with error code [%s]' % str(r.status_code))
+            raise Exception('[%s]: Exception with error code [%s]' % (url,
+                                                                      str(r.status_code)))
 
 
 class BluelivUser(BASEModel):
@@ -84,5 +85,35 @@ class BluelivUser(BASEModel):
 
         if 'badge' in kwargs:
             self.last_name = kwargs.get('badge', None)
+
+        super().__init__()
+
+
+class BluelivIOC(BASEModel):
+    spark_id = None
+    ioc_id = None
+    content = None
+    ioc_type = None
+    ioc_subtype = None
+    created_at = None
+
+    def __init__(self, *args, **kwargs):
+        if 'spark_id' in kwargs:
+            self.spark_id = kwargs.get('spark_id', None)
+
+        if 'ioc_id' in kwargs:
+            self.ioc_id = kwargs.get('ioc_id', None)
+
+        if 'content' in kwargs:
+            self.content = kwargs.get('content', None)
+
+        if 'ioc_type' in kwargs:
+            self.ioc_type = kwargs.get('ioc_type', None)
+
+        if 'ioc_subtype' in kwargs:
+            self.ioc_subtype = kwargs.get('ioc_subtype', None)
+
+        if 'created_at' in kwargs:
+            self.created_at = kwargs.get('created_at', None)
 
         super().__init__()
