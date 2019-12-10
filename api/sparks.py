@@ -46,11 +46,6 @@ class SparksRequest(BluelivRequest):
         else:
             self._discover_url = BASE_SPARKS_DISCOVER_URL
 
-        if 'iocs' in kwargs:
-            self._iocs_url = kwargs.get('iocs', '/iocs')
-        else:
-            self._iocs_url = BASE_SPARKS_IOCS_URL
-
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
 
