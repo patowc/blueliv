@@ -27,7 +27,6 @@ class SparksRequest(BluelivRequest):
     _base_url = '/sparks'
     _timeline_url = '/timeline'
     _discover_url = '/discover'
-    _iocs_url = '/iocs'
     limit = None
     since_id = None
 
