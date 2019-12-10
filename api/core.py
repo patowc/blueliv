@@ -20,7 +20,6 @@ class BluelivRequest(BASERequestModel):
     _authorization_header = 'Authorization'
     _authorization_value = 'Token invalid-token'
     _headers = {}
-    _iocs_types_url = None
     last_response = None
     request_count = 0
 
@@ -29,7 +28,6 @@ class BluelivRequest(BASERequestModel):
         self._authorization_header = AUTHORIZATION_HEADER
         self._authorization_value = AUTHORIZATION
         self._headers = {self._authorization_header: self._authorization_value}
-        self._iocs_types_url = BASE_SPARKS_IOCS_TYPES_URL
 
     def _increment_count(self):
         self.request_count += 1
