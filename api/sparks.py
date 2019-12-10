@@ -25,6 +25,7 @@ class Spark(BASEModel):
 
 class SparksRequest(BluelivRequest):
     _base_url = '/sparks'
+    _sparks_iocs_url = '/iocs'
     _timeline_url = '/timeline'
     _discover_url = '/discover'
     limit = None
@@ -45,6 +46,11 @@ class SparksRequest(BluelivRequest):
             self._discover_url = kwargs.get('discover', '/discover')
         else:
             self._discover_url = BASE_SPARKS_DISCOVER_URL
+
+        if 'iocs' in kwargs:
+            self._sparks_iocs_url = kwargs.get('iocs', '/iocs')
+        else:
+            self._sparks_iocs_url = BASE_SPARKS_IOCS_URL
 
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
@@ -95,8 +101,8 @@ class SparksRequest(BluelivRequest):
     def iocs(self, spark_id, limit=None, since_id=None):
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
-                                 spark_id,
-                                 self._iocs_url)
+                                    spark_id,
+                                    self._sparks_iocs_url)
 
         if since_id:
             params['since_id'] = since_id
