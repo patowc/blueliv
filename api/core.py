@@ -17,16 +17,21 @@ class BASERequestModel:
 
 class BluelivRequest(BASERequestModel):
     _url = ''
+    _custom_token = None
     _authorization_header = 'Authorization'
     _authorization_value = 'Token invalid-token'
     _headers = {}
     last_response = None
     request_count = 0
 
-    def __init__(self):
+    def __init__(self, token=None):
         self._url = configuration.BASE_API_URL
         self._authorization_header = configuration.AUTHORIZATION_HEADER
-        self._authorization_value = configuration.AUTHORIZATION
+        if not token:
+            self._authorization_value = configuration.AUTHORIZATION
+        else:
+            self._authorization_value = configuration.AUTHORIZATION_FORMAT % token
+            self._custom_token = token
         self._headers = {self._authorization_header: self._authorization_value}
 
     def _increment_count(self):
