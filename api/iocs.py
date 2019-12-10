@@ -53,6 +53,8 @@ class BluelivIOC(BASEModel):
 class IocsRequest(BluelivRequest):
     _base_url = '/iocs'
     _iocs_types_url = '/types'
+    _iocs_timeline_url = '/timeline'
+    _iocs_discover_url = '/discover'
     limit = None
     since_id = None
 
@@ -65,6 +67,16 @@ class IocsRequest(BluelivRequest):
         else:
             self._base_url = configuration.BASE_IOCS_URL
 
+        if 'timeline' in kwargs:
+            self._iocs_timeline_url = kwargs.get('timeline', '/timeline')
+        else:
+            self._iocs_timeline_url = configuration.BASE_IOCS_TIMELINE_URL
+
+        if 'discover' in kwargs:
+            self._iocs_discover_url = kwargs.get('discover', '/discover')
+        else:
+            self._iocs_discover_url = configuration.BASE_IOCS_DISCOVER_URL
+
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
 
@@ -73,8 +85,40 @@ class IocsRequest(BluelivRequest):
 
         super().__init__(token=self._custom_token)
 
-    def iocs_types(self):
+    def types(self):
         resource = '%s%s' % (self._base_url,
                              self._iocs_types_url)
         results = self.request(resource=resource)
+        return results
+
+    def timeline(self, limit=None, since_id=None):
+        params = {}
+        resource_url = '%s%s' % (self._base_url,
+                                 self._iocs_timeline_url)
+
+        if since_id:
+            params['since_id'] = since_id
+
+        if limit:
+            params['limit'] = limit
+
+        results = self.request(resource=resource_url,
+                               params=params)
+
+        return results
+
+    def discover(self, limit=None, since_id=None):
+        params = {}
+        resource_url = '%s%s' % (self._base_url,
+                                 self._iocs_discover_url)
+
+        if since_id:
+            params['since_id'] = since_id
+
+        if limit:
+            params['limit'] = limit
+
+        results = self.request(resource=resource_url,
+                               params=params)
+
         return results
