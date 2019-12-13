@@ -118,35 +118,27 @@ class SparksRequest(BluelivRequest):
 
         return results
 
-    def publish(self):
-        # TODO: implemente publish spark.
-        # {
-        #     "title": "The title of the new Spark",
-        #     "description": "The description of the new Spark",
-        #     "source_url": [
-        #         "http://www.domain.com",
-        #         "http://www.fake.net"
-        #     ],
-        #     "source_malware_id": "4ee8f61680ea3df5be3c5f12914533d0a8e3ac37543eeb626415c8e0ff5c16c6",
-        #     "tags": [
-        #         "URL",
-        #         "IPv4",
-        #         "EXAMPLE"
-        #     ],
-        #     "iocs": [
-        #         {
-        #             "content": "http://www.domain.com",
-        #             "type": "url"
-        #         },
-        #         {
-        #             "content": "127.0.0.1",
-        #             "type": "ipv4"
-        #         },
-        #         {
-        #             "content": "C3499C2729730A7F807EFB8676A92DCB6F8A3F8F",
-        #             "subtype": "hash-sha1",
-        #             "type": "hash"
-        #         }
-        #     ]
-        # }
-        pass
+    def publish(self, title, description, tlp='green', source_urls=None, source_malware_id=None, tags=None, iocs=None):
+        resource_url = self._base_url
+        data = dict()
+
+        data['title'] = title
+        data['description'] = description
+        data['tlp'] = tlp
+        if source_urls:
+            data['source_urls'] = source_urls
+
+        if source_malware_id:
+            data['source_malware_id'] = source_malware_id
+
+        if tags:
+            data['tags'] = tags
+
+        if iocs:
+            data['iocs'] = iocs
+
+        results = self.request(resource=resource_url,
+                               POST=True,
+                               data=data,
+                               json_format=True)
+        return results
