@@ -48,8 +48,6 @@ class BluelivRequest(BASERequestModel):
         if POST is False and data is True:
             raise Exception('If POST is set to False (or left by default), data must be None (left by default).')
 
-        print(data)
-
         r = None
         self._increment_count()
         url = self._url
