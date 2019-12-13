@@ -41,7 +41,7 @@ class BluelivRequest(BASERequestModel):
     def _decrement_count(self):
         self.request_count -= 1
 
-    def request(self, resource=None, params=None, POST=False, data=None, json_format=False):
+    def request(self, resource=None, params=None, POST=False, data=None, json_format=False, files=None):
         if POST is True and data is None:
             raise Exception('If POST is set to True, we must provide data (was None).')
 
@@ -56,6 +56,10 @@ class BluelivRequest(BASERequestModel):
                             resource)
         self._last_url_invoked = url
 
+        if files:
+            POST = True
+            json_format = False
+
         if not params:
             if POST is False:
                 r = requests.get(url, headers=self._headers)
@@ -63,7 +67,10 @@ class BluelivRequest(BASERequestModel):
                 if json_format is True:
                     r = requests.post(url, headers=self._headers, json=data)
                 else:
-                    r = requests.post(url, headers=self._headers, data=data)
+                    if files:
+                        r = requests.post(url, headers=self._headers, files=files)
+                    else:
+                        r = requests.post(url, headers=self._headers, data=data)
         else:
             if POST is False:
                 r = requests.get(url, headers=self._headers, params=params)
@@ -71,7 +78,10 @@ class BluelivRequest(BASERequestModel):
                 if json_format is True:
                     r = requests.post(url, headers=self._headers, params=params, json=data)
                 else:
-                    r = requests.post(url, headers=self._headers, params=params, data=data)
+                    if files:
+                        r = requests.post(url, headers=self._headers, params=params, files=files)
+                    else:
+                        r = requests.post(url, headers=self._headers, params=params, data=data)
 
         if r.status_code == 200:
             result = r.json()
@@ -79,6 +89,11 @@ class BluelivRequest(BASERequestModel):
                 return json.dumps(result)
             else:
                 return None
+        elif r.status_code == 400:
+            raise Exception('[%s]: Error uploading malware (%s): %s' % (url,
+                                                                        str(r.status_code),
+                                                                        str(r.content)))
+
         elif r.status_code == 422:
             raise Exception('[%s]: Error parsing the term parameter (url) [%s]: %s' % (url,
                                                                                        str(r.status_code),
