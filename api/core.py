@@ -90,9 +90,9 @@ class BluelivRequest(BASERequestModel):
             else:
                 return None
         elif r.status_code == 400:
-            raise Exception('[%s]: Error uploading malware (%s): %s' % (url,
-                                                                        str(r.status_code),
-                                                                        str(r.content)))
+            raise Exception('[%s]: Error in the request (%s): %s' % (url,
+                                                                     str(r.status_code),
+                                                                     str(r.content)))
 
         elif r.status_code == 422:
             raise Exception('[%s]: Error parsing the term parameter (url) [%s]: %s' % (url,
