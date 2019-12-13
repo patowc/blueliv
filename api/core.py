@@ -41,12 +41,14 @@ class BluelivRequest(BASERequestModel):
     def _decrement_count(self):
         self.request_count -= 1
 
-    def request(self, resource=None, params=None, POST=False, data=None):
+    def request(self, resource=None, params=None, POST=False, data=None, json_format=False):
         if POST is True and data is None:
             raise Exception('If POST is set to True, we must provide data (was None).')
 
         if POST is False and data is True:
             raise Exception('If POST is set to False (or left by default), data must be None (left by default).')
+
+        print(data)
 
         r = None
         self._increment_count()
@@ -60,12 +62,18 @@ class BluelivRequest(BASERequestModel):
             if POST is False:
                 r = requests.get(url, headers=self._headers)
             else:
-                r = requests.post(url, headers=self._headers, data=data)
+                if json_format is True:
+                    r = requests.post(url, headers=self._headers, json=data)
+                else:
+                    r = requests.post(url, headers=self._headers, data=data)
         else:
             if POST is False:
                 r = requests.get(url, headers=self._headers, params=params)
             else:
-                r = requests.post(url, headers=self._headers, params=params, data=data)
+                if json_format is True:
+                    r = requests.post(url, headers=self._headers, params=params, json=data)
+                else:
+                    r = requests.post(url, headers=self._headers, params=params, data=data)
 
         if r.status_code == 200:
             result = r.json()
@@ -73,6 +81,10 @@ class BluelivRequest(BASERequestModel):
                 return json.dumps(result)
             else:
                 return None
+        elif r.status_code == 422:
+            raise Exception('[%s]: Error parsing the term parameter (url) [%s]: %s' % (url,
+                                                                                       str(r.status_code),
+                                                                                       str(r.content)))
         else:
             raise Exception('[%s]: Exception with error code [%s]' % (url,
                                                                       str(r.status_code)))
