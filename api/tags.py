@@ -12,6 +12,7 @@ class Tag(BASEModel):
 
 
 class TagsRequest(BluelivRequest):
+    _category = 'tags'
     _base_url = '/tags'
     _tags_sparks_url = '/sparks'
     _tags_iocs_url = '/iocs'
