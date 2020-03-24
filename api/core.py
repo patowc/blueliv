@@ -167,6 +167,9 @@ class BluelivRequest(BASERequestModel):
         if self._category == 'core':
             raise Exception('CORE is not searchable. Please, invoke search from one of the iocs, sparks or tags subclasses.')
 
+        if self._category != 'iocs' and self._category != 'sparks' and self._category != 'tags:':
+            raise Exception('Allowed categories for search are: iocs, sparks and tags. This class is not supported by search yet.')
+
         params = {'search': search_term}
         if tag:
             params['tag'] = tag
