@@ -34,6 +34,7 @@ class BluelivUser(BASEModel):
 
 
 class UsersRequest(BluelivRequest):
+    _category = 'users'
     _base_url = '/users'
     _users_sparks_url = '/sparks'
     _users_iocs_url = '/iocs'
