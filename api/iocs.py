@@ -51,6 +51,7 @@ class BluelivIOC(BASEModel):
 
 
 class IocsRequest(BluelivRequest):
+    _category = 'iocs'
     _base_url = '/iocs'
     _iocs_types_url = '/types'
     _iocs_timeline_url = '/timeline'
