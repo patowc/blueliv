@@ -24,6 +24,7 @@ class Spark(BASEModel):
 
 
 class SparksRequest(BluelivRequest):
+    _category = 'sparks'
     _base_url = '/sparks'
     _sparks_iocs_url = '/iocs'
     _timeline_url = '/timeline'
