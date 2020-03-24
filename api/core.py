@@ -29,10 +29,12 @@ class BluelivRequest(BASERequestModel):
         self._url = configuration.BASE_API_URL
         self._authorization_header = configuration.AUTHORIZATION_HEADER
         if not token:
+            self.token = configuration.TOKEN
             self._authorization_value = configuration.AUTHORIZATION
         else:
             self._authorization_value = configuration.AUTHORIZATION_FORMAT % token
             self._custom_token = token
+            self.token = token
         self._headers = {self._authorization_header: self._authorization_value}
 
     def _increment_count(self):
