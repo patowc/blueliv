@@ -4,6 +4,7 @@ from .core import BluelivRequest
 
 
 class CrawlerRequest(BluelivRequest):
+    _category = 'crawl'
     _base_url = '/crawl'
     term = None
     is_text = False
