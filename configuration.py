@@ -1,5 +1,13 @@
 import os
 
+DEBUG = None
+DEBUG = os.getenv('BLUELIV_API_DEBUG', DEBUG)
+if DEBUG:
+    DEBUG = True
+else:
+    DEBUG = False
+# ENV: BLUELIV_API_DEBUG
+
 VERSION = 'v1'
 VERSION = os.getenv('BLUELIV_API_VERSION', VERSION)
 # ENV: BLUELIV_API_VERSION
