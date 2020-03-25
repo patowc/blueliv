@@ -241,6 +241,39 @@ users = UsersRequest()
 users.list_iocs(username='rramirez', limit=0, since_id=0)
 ```
 
+## Search
+
+The Blueliv's API includes several powerful search capabilities that we have include in the core base class (*blueliv.api.core.BASERequestModel.search(...)*).
+
+This is a decision oriented to save lines of code avoiding a re-implementation in every class. Within this inherited "search" method, the caller class is checked and the search API request is performed properly.
+
+So, if you want to search for sparks, iocs or tags (what is supported right now):
+
+```
+from blueliv.api.iocs import IocsRequest
+
+iocs = IocsRequest()
+result = iocs.search(search_term='my term', tag='my tag', limit=0, since_id=0)
+```
+
+```
+from blueliv.api.sparks import SparksRequest
+
+sparks = SparksRequest()
+result = sparks.search(search_term='my term', tag='my tag', limit=0, since_id=0, as_json=True)
+```
+
+In this case, as_json was True so the result will be a list of dicts. If as_json is False, it will return a JSON-formatted string.
+
+
+```
+from blueliv.api.tags import TagsRequest
+
+tags = TagsRequest()
+tags.search(search_term='my tag')
+```
+
+
 
 ## Created
 
