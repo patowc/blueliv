@@ -62,7 +62,7 @@ Finding IoCs in your timeline:
 from blueliv.api.iocs import IocsRequest
 
 iocs = IocsRequest()
-iocs.timeline(self, limit=0, since_id=0)
+iocs.timeline(limit=0, since_id=0)
 ```
 
 Finding IoCs in the discover stream:
@@ -71,7 +71,7 @@ Finding IoCs in the discover stream:
 from blueliv.api.iocs import IocsRequest
 
 iocs = IocsRequest()
-iocs.discover(self, limit=0, since_id=0)
+iocs.discover(limit=0, since_id=0)
 ```
 
 ### blueliv.api.malwares
@@ -162,7 +162,7 @@ and, _publish_ to the spark stream, in your timeline:
 from blueliv.api.sparks import SparksRequest
 
 sparks = SparksRequest()
-sparks.publish(title='My test sprak',
+sparks.publish(title='My test spark',
                description='Description should be detailed',
                tlp='green',
                source_urls=...,
