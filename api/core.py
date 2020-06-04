@@ -33,7 +33,7 @@ class BluelivRequest(BASERequestModel):
     last_response = None
     request_count = 0
 
-    def __init__(self, token=None):
+    def __init__(self, token:str=None):
         self._category = 'core'
         self._url = ''
         self._base_url = ''
@@ -230,7 +230,7 @@ class BluelivRequest(BASERequestModel):
             raise Exception('[%s]: Exception code [%d]' % (url,
                                                            r.status_code))
 
-    def search(self, search_term, tag=None, limit=0, since_id=0, as_json=True):
+    def search(self, search_term: str, tag:str=None, limit:int=0, since_id:int=0, as_json:bool=True):
         if self._category == 'core':
             raise Exception('CORE is not searchable.')
 
