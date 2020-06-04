@@ -203,6 +203,14 @@ class BluelivRequest(BASERequestModel):
 
         super().__init__()
 
+    def get_category(self):
+        """
+        A getter to retrieve the category value.
+
+        :return: category value (_category)
+        """
+        return self._category
+
     def request(self, **kwargs):
         """
         Request method is the base method to be able to retrieve from Blueliv
