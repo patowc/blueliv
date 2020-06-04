@@ -1,6 +1,9 @@
 import typing
 
-from . import configuration
+from .configuration import (
+    BASE_USERS_URL
+)
+
 from .core import BASEModel, BluelivRequest
 
 
@@ -56,7 +59,7 @@ class UsersRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/users')
         else:
-            self._base_url = configuration.BASE_USERS_URL
+            self._base_url = BASE_USERS_URL
 
         if 'username' in kwargs:
             self.username = kwargs.get('username', None)
