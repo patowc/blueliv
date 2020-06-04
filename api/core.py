@@ -33,6 +33,10 @@ class BASEModel:
         http://google.github.io/styleguide/pyguide.html
 
     """
+
+    # pylint: disable=too-few-public-methods
+    # Base model (consider it as an interface)
+
     _instance_counter = 0
 
     def __init__(self):
@@ -56,6 +60,10 @@ class BASERequestModel:
         token: the API token set to access the API.
 
     """
+
+    # pylint: disable=too-few-public-methods
+    # Base model (consider it as an interface)
+
     version = None
     token = None
 
@@ -110,6 +118,10 @@ class BluelivRequest(BASERequestModel):
         so all results retrieved will not be older that this reference.
 
     """
+
+    # pylint: disable=too-many-instance-attributes
+    # 13 elements, but are all used.
+
     _category: typing.Optional[str] = None
     _url: typing.Optional[str] = None
     _base_url: typing.Optional[str] = None
@@ -167,12 +179,6 @@ class BluelivRequest(BASERequestModel):
         self._headers = {self._authorization_header: self._authorization}
 
         super().__init__()
-
-    def _increment_count(self):
-        self.request_count += 1
-
-    def _decrement_count(self):
-        self.request_count -= 1
 
     def request(self, **kwargs):
         """
@@ -233,7 +239,6 @@ class BluelivRequest(BASERequestModel):
             raise Exception('If use_post=False, data must be None (default)')
 
         res = None
-        self._increment_count()
         url = self._url
         if resource:
             url = '%s%s' % (url,
@@ -346,14 +351,14 @@ class BluelivRequest(BASERequestModel):
         raise Exception('[%s]: Exception code [%d]' % (url,
                                                        res.status_code))
 
-    def search(self,
+    def search(self,  # pylint: disable=too-many-arguments
                search_term: str,
                tag: str = None,
                limit: int = 0,
                since_id: int = 0,
                as_json: bool = True):
         """
-        This is the search metjod that will be available for all subclasses
+        This is the search method that will be available for all subclasses
         that inherit from the core one.
 
         :param search_term: the term we want to search.
