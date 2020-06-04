@@ -1,3 +1,7 @@
+"""
+Setup configuration to be able to build an official package for PyPi.
+
+"""
 import setuptools
 
 with open("README.md", "r") as fh:
