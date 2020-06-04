@@ -1,3 +1,7 @@
+"""
+Tags to manage and dealt with tagged assets and to tag by ourselves.
+
+"""
 import typing
 
 from .configuration import (
@@ -7,7 +11,10 @@ from .configuration import (
 from .core import BASEModel, BluelivRequest
 
 
-class Tag(BASEModel):
+class Tag(BASEModel):  # pylint: disable=too-few-public-methods
+    """
+    A model to store a tag, with its information.
+    """
     tag_id: typing.Optional[str] = None
     name: typing.Optional[str] = None
     questions_count: int = 0
@@ -24,14 +31,18 @@ class Tag(BASEModel):
         super().__init__()
 
 
-class TagsRequest(BluelivRequest):
+class TagsRequest(BluelivRequest):  # pylint: disable=too-many-instance-attributes
+    """
+    The model to perform and deal with the requests.
+
+    """
     _category: str = ''
     _base_url: str = ''
     _tags_sparks_url: str = ''
     _tags_iocs_url: str = ''
     tag_slug: typing.Optional[str] = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self._category = 'tags'
         self._base_url = '/tags'
         self._tags_sparks_url = '/sparks'
@@ -71,12 +82,25 @@ class TagsRequest(BluelivRequest):
                          base_url=self._base_url)
 
     def list(self):
+        """
+        List all the tags in the Community.
+
+        :return: dict, list or JSON with the tag list.
+        """
         return self.request(resource=self._base_url)
 
     def list_sparks(self,
                     tag_slug: str,
                     limit: typing.Optional[str] = None,
                     since_id: typing.Optional[str] = None):
+        """
+        List sparks tagged with a specific tag.
+
+        :param tag_slug: the tag.
+        :param limit: the maximum number of items we want to retrieve.
+        :param since_id: the reference id from we want to receive items.
+        :return: dict, list or JSON with the sparks.
+        """
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
                                     tag_slug,
@@ -94,6 +118,15 @@ class TagsRequest(BluelivRequest):
     def list_iocs(self, tag_slug: str,
                   limit: typing.Optional[str] = None,
                   since_id: typing.Optional[str] = None):
+        """
+        List IoCs associated with a tag.
+
+        :param tag_slug: the tag.
+        :param limit: the maximum number of items we want to retrieve.
+        :param since_id: the reference id from we want to receive items.
+        :return: dict, list or JSON with the IoCs.
+
+        """
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
                                     tag_slug,
