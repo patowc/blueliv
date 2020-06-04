@@ -1,3 +1,5 @@
+import typing
+
 from . import configuration
 from .core import BASEModel, BluelivRequest
 
@@ -33,15 +35,21 @@ class BluelivUser(BASEModel):
 
 
 class UsersRequest(BluelivRequest):
-    _category = 'users'
-    _base_url = '/users'
-    _users_sparks_url = '/sparks'
-    _users_iocs_url = '/iocs'
-    username = None
-    limit = None
-    since_id = None
+    _category: str = ''
+    _base_url: str = ''
+    _users_sparks_url: str = ''
+    _users_iocs_url: str = ''
+    username: typing.Optional[str] = None
 
     def __init__(self, *args, **kwargs):
+        self._category = 'users'
+        self._base_url = '/users'
+        self._users_sparks_url = '/sparks'
+        self._users_iocs_url = '/iocs'
+        self.username = None
+        self.limit = None
+        self.since_id = None
+
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -49,16 +57,6 @@ class UsersRequest(BluelivRequest):
             self._base_url = kwargs.get('base_url', '/users')
         else:
             self._base_url = configuration.BASE_USERS_URL
-
-        if 'sparks' in kwargs:
-            self._users_sparks_url = kwargs.get('sparks', '/sparks')
-        else:
-            self._users_sparks_url = configuration.BASE_USERS_SPARKS_URL
-
-        if 'iocs' in kwargs:
-            self._users_iocs_url = kwargs.get('iocs', '/iocs')
-        else:
-            self._users_iocs_url = configuration.BASE_USERS_IOCS_URL
 
         if 'username' in kwargs:
             self.username = kwargs.get('username', None)
@@ -69,12 +67,12 @@ class UsersRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.since_id = kwargs.get('since_id', None)
 
-        super().__init__(token=self._custom_token)
+        super().__init__(token=self._custom_token,
+                         base_url=self._base_url)
 
     def me(self):
         resource = '%s/me' % self._base_url
-        results = self.request(resource=resource)
-        return results
+        return self.request(resource=resource)
 
     def list_sparks(self, username, limit=None, since_id=None):
         params = {}
@@ -88,10 +86,8 @@ class UsersRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self.request(resource=resource_url,
+                            params=params)
 
     def list_iocs(self, username, limit=None, since_id=None):
         params = {}
@@ -105,7 +101,5 @@ class UsersRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self.request(resource=resource_url,
+                            params=params)
