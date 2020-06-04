@@ -1,7 +1,8 @@
+import typing
 import requests
 import json
 
-from . import configuration
+from .configuration import *
 
 
 class BASEModel:
@@ -16,7 +17,7 @@ class BASERequestModel:
     token = None
 
     def __init__(self):
-        self.version = configuration.VERSION
+        self.version = VERSION
         self.token = 'invalid-token'
 
 
@@ -32,8 +33,10 @@ class BluelivRequest(BASERequestModel):
     _last_url_invoked = None
     last_response = None
     request_count = 0
+    limit: typing.Optional[str] = None
+    since_id: typing.Optional[str] = None
 
-    def __init__(self, token: str = None):
+    def __init__(self, *args, **kwargs):
         self._category = 'core'
         self._url = ''
         self._base_url = ''
@@ -45,24 +48,30 @@ class BluelivRequest(BASERequestModel):
         self._last_url_invoked = None
         self.last_response = None
         self.request_count = 0
+        self.limit = None
+        self.since_id = None
 
-        if configuration.DEBUG is True:
-            print('Token[%s]' % token)
+        if 'token' in kwargs:
+            self._custom_token = kwargs.get('token', None)
 
-        self._url = configuration.BASE_API_URL
-        self._authorization_header = configuration.AUTHORIZATION_HEADER
-        if not token:
-            self.token = configuration.TOKEN
-            self._authorization = configuration.AUTHORIZATION
-            if configuration.DEBUG is True:
+        if not self._custom_token:
+            self._custom_token = None
+            self.token = TOKEN
+            self._authorization = AUTHORIZATION
+            if DEBUG is True:
                 print('Token parameter was None. ENV-Token[%s]' % self.token)
                 print('Authorization header [%s]' % self._authorization)
         else:
-            self._authorization = configuration.AUTHORIZATION_FORMAT % token
-            self._custom_token = token
-            self.token = token
+            self._authorization = AUTHORIZATION_FORMAT % self._custom_token
+            self.token = self._custom_token
 
+        if 'base_url' in kwargs:
+            self._base_url = kwargs.get('base_url', '')
+
+        self._url = BASE_API_URL
+        self._authorization_header = AUTHORIZATION_HEADER
         self._headers = {self._authorization_header: self._authorization}
+
         super().__init__()
 
     def _increment_count(self):
@@ -105,7 +114,7 @@ class BluelivRequest(BASERequestModel):
         if 'as_json' in kwargs:
             as_json = kwargs.get('as_json', False)
 
-        if configuration.DEBUG is True:
+        if DEBUG is True:
             print('> BluelivRequest.request called.')
 
         if POST is True and data is None:
@@ -127,31 +136,31 @@ class BluelivRequest(BASERequestModel):
 
         self._last_url_invoked = url
 
-        if configuration.DEBUG is True:
+        if DEBUG is True:
             print('> BluelivRequest.request for compound url [%s].' % url)
 
         if files:
             POST = True
             json_format = False
 
-        if configuration.DEBUG is True:
+        if DEBUG is True:
             print('request with Headers [%s].' % self._headers)
 
         if not params:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('request called with no params parameter.')
 
             if POST is False:
-                if configuration.DEBUG is True:
+                if DEBUG is True:
                     print('request POST is False.')
 
                 r = requests.get(url, headers=self._headers)
             else:
-                if configuration.DEBUG is True:
+                if DEBUG is True:
                     print('request POST is True.')
 
                 if json_format is True:
-                    if configuration.DEBUG is True:
+                    if DEBUG is True:
                         print('request POST is True: [JSON FORMAT]')
 
                     r = requests.post(url, headers=self._headers, json=data)
@@ -165,20 +174,20 @@ class BluelivRequest(BASERequestModel):
                                           headers=self._headers,
                                           data=data)
         else:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('request called with params: [%s].' % str(params))
 
             if POST is False:
-                if configuration.DEBUG is True:
+                if DEBUG is True:
                     print('request POST is False.')
 
                 r = requests.get(url, headers=self._headers, params=params)
             else:
-                if configuration.DEBUG is True:
+                if DEBUG is True:
                     print('request POST is False.')
 
                 if json_format is True:
-                    if configuration.DEBUG is True:
+                    if DEBUG is True:
                         print('request POST is True: [JSON FORMAT].')
 
                     r = requests.post(url,
@@ -198,7 +207,7 @@ class BluelivRequest(BASERequestModel):
                                           data=data)
 
         if r.status_code == 200:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('request RESULT STATUS [200]. OK.')
 
             result = r.json()
@@ -210,7 +219,7 @@ class BluelivRequest(BASERequestModel):
             else:
                 return None
         elif r.status_code == 400:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('> BluelivRequest.request RESULT STATUS [400]. ERROR.')
 
             raise Exception('[%s]: Error in request [%d]: %s' % (url,
@@ -218,14 +227,14 @@ class BluelivRequest(BASERequestModel):
                                                                  r.content))
 
         elif r.status_code == 422:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('request RESULT STATUS [422]. ERROR.')
 
             raise Exception('[%s]: Error in term [%d]: %s' % (url,
                                                               r.status_code,
                                                               str(r.content)))
         else:
-            if configuration.DEBUG is True:
+            if DEBUG is True:
                 print('request STATUS [%d]. UNEXPECTED.' % r.status_code)
             raise Exception('[%s]: Exception code [%d]' % (url,
                                                            r.status_code))
@@ -252,7 +261,7 @@ class BluelivRequest(BASERequestModel):
         if since_id > 0:
             params['since_id'] = since_id
 
-        results = self.request(resource=configuration.BASE_SEARCH_URL,
+        results = self.request(resource=BASE_SEARCH_URL,
                                search_type=self._category,
                                POST=False,
                                params=params,
