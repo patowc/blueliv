@@ -75,6 +75,12 @@ class BASERequestModel:
         # token is set to a fixed, invalid, string initially.
         self.token = 'invalid-token'
 
+    def get_token(self):
+        return self.token
+
+    def get_version(self):
+        return self.version
+
 
 class BluelivRequest(BASERequestModel):
     """BluelivRequest is a generic class that may request resources from the
