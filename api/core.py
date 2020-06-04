@@ -17,7 +17,8 @@ from .configuration import (
 
 
 class BASEModel:
-    """BASEModel is the root class for all models in the package.
+    """BASEModel is the root class for all models in the package. Focused in
+    storing the details about a model, not to implement actions.
 
     To track instances count, we are using an attribute _instance_counter that
     will increment a counter whenever a new instance is created.
