@@ -201,7 +201,7 @@ class SparksRequest(BluelivRequest):
         return self.request(resource=resource_url,
                             params=params)
 
-    def publish(self, title: str, description: str,  # pylint: disable=too-many-arguments
+    def publish(self, title: str, description: str,
                 tlp: str = 'green',
                 source_urls: typing.Optional[list] = None,
                 source_malware_id: str = None,
@@ -219,6 +219,9 @@ class SparksRequest(BluelivRequest):
         :param iocs: related IoCs.
         :return: dict, list or JSON.
         """
+
+        # pylint: disable=too-many-arguments
+
         resource_url = self._base_url
         data = dict()
 
