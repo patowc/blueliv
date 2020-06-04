@@ -1,6 +1,11 @@
+"""
+Core will define the base classes and methods available for the whole API
+package.
+
+"""
 import typing
-import requests
 import json
+import requests
 
 from .configuration import (
     DEBUG,
@@ -12,37 +17,113 @@ from .configuration import (
 
 
 class BASEModel:
+    """BASEModel is the root class for all models in the package.
+
+    To track instances count, we are using an attribute _instance_counter that
+    will increment a counter whenever a new instance is created.
+
+    Attributes:
+        _instance_counter: the counter to track instance count.
+
+    Todo:
+        * Potentially remove the _instance_counter. In evaluation phase.
+
+    .. _Google Python Style Guide:
+        http://google.github.io/styleguide/pyguide.html
+
+    """
     _instance_counter = 0
 
     def __init__(self):
+        '''Increment instance counter when constructor is invoked.
+
+        This is a potential element to be removed, as it may have no use.
+        '''
         self._instance_counter += 1
 
 
 class BASERequestModel:
+    """BASERequestModel is the root class for any request based module. This
+    means that every module performing API requests will be derived from it.
+
+    It has two main attributes:
+
+    Attributes:
+        version: where we will track the API version (will be taken from the
+        configurations).
+
+        token: the API token set to access the API.
+
+    """
     version = None
     token = None
 
     def __init__(self):
         self.version = VERSION
+        # token is set to a fixed, invalid, string initially.
         self.token = 'invalid-token'
 
 
 class BluelivRequest(BASERequestModel):
-    _category = None
-    _url = None
-    _base_url = None
-    _custom_token = None
-    _authorization_header = None
-    _authorization = None
-    _headers = {}
-    _allowed_categories = []
-    _last_url_invoked = None
-    last_response = None
-    request_count = 0
+    """BluelivRequest is a generic class that may request resources from the
+    remote API. Is like having a raw request class where we can set in a
+    manual way the destination urls to connect, and the resources to be
+    processed.
+
+    It has several attributes to be configured:
+
+    Attributes:
+        _category: this is the category of request we are performing. Within
+        the following: iocs, sparks, tags.
+
+        _url: the final url that the request is sent. It is built along the
+        functions and variables in the specific invocation.
+
+        _base_url: this is the base resource for the final url, for example
+        if you are dealing with users, _base_url will be 'users'
+
+        _custom_token: when the token is passed in an explicit way (from the
+        constructor parameters) it will be stored here. Then, it will be
+        copied to the _token attribute.
+
+        _authorization_header: which is the header we have to use when sending
+        the request to the remote endpoint. We are ready to change if the API
+        changes (for example, from Token to Bearer or something similar).
+
+        _authorization: is the final Authorization string that will be set.
+
+        _headers: a dictionary with extra headers that are going to be passed
+        to the request.
+
+        _allowed_categories: a list of the categories that can be configured,
+        as in the _category attribute.
+
+        _last_url_invoked: an attribute we can use for debugging purposes. It
+        will store the url from the last request.
+
+        request_count: a counter for the request being sent.
+
+        limit: a parameter to limit the number of items to be retrieved.
+
+        since_id: a reference mark from a previous request or time position,
+        so all results retrieved will not be older that this reference.
+
+    """
+    _category: typing.Optional[str] = None
+    _url: typing.Optional[str] = None
+    _base_url: typing.Optional[str] = None
+    _custom_token: typing.Optional[str] = None
+    _authorization_header: typing.Optional[str] = None
+    _authorization: typing.Optional[str] = None
+    _headers: dict = {}
+    _allowed_categories: list = []
+    _last_url_invoked: typing.Optional[str] = None
+    last_response: typing.Optional[str] = None
+    request_count: int = 0
     limit: typing.Optional[str] = None
     since_id: typing.Optional[str] = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self._category = 'core'
         self._url = ''
         self._base_url = ''
@@ -57,12 +138,18 @@ class BluelivRequest(BASERequestModel):
         self.limit = None
         self.since_id = None
 
+        # If token is present in kwargs, we set it.
         if 'token' in kwargs:
+            # Default value for token is None. It is set onto _custom_token
             self._custom_token = kwargs.get('token', None)
 
+        # If no _custom_token, we will set the default from configuration.
+        # TOKEN may have a value taken from the environment.
         if not self._custom_token:
             self._custom_token = None
             self.token = TOKEN
+            # We get AUTHORIZATION from the configuration (as the full string
+            # is built there.
             self._authorization = AUTHORIZATION
             if DEBUG is True:
                 print('Token parameter was None. ENV-Token[%s]' % self.token)
@@ -86,11 +173,26 @@ class BluelivRequest(BASERequestModel):
     def _decrement_count(self):
         self.request_count -= 1
 
-    def request(self, *args, **kwargs):
+    def request(self, **kwargs):
+        """
+        Request method is the base method to be able to retrieve from Blueliv
+        endpoint in the API.
+
+        :param resource: the url we are going to connect to.
+        :param search_type: the resource category we search for or retrieve.
+        :param params: search or request params.
+        :param use_post: if POST method will be used (True).
+        :param data: data to be posted (use_post must be True).
+        :param json_format: if data (see data) is in JSON format.
+        :param files: the files we want to include in the request.
+        :param as_json: if we want to receive the response as JSON (True).
+        :return: dict or JSON (if as_json ==  True) with the results.
+
+        """
         resource = None
         search_type = None
         params = None
-        POST = False
+        use_post = False
         data = None
         json_format = False
         files = None
@@ -105,8 +207,8 @@ class BluelivRequest(BASERequestModel):
         if 'params' in kwargs:
             params = kwargs.get('params', None)
 
-        if 'POST' in kwargs:
-            POST = kwargs.get('POST', False)
+        if 'use_post' in kwargs:
+            use_post = kwargs.get('use_post', False)
 
         if 'data' in kwargs:
             data = kwargs.get('data', None)
@@ -123,13 +225,13 @@ class BluelivRequest(BASERequestModel):
         if DEBUG is True:
             print('> BluelivRequest.request called.')
 
-        if POST is True and data is None:
-            raise Exception('If POST = True, must provide data (was None).')
+        if use_post is True and data is None:
+            raise Exception('If use_post=True, must provide data (was None)')
 
-        if POST is False and data is True:
-            raise Exception('If POST = False, data must be None (default).')
+        if use_post is False and data is True:
+            raise Exception('If use_post=False, data must be None (default)')
 
-        r = None
+        res = None
         self._increment_count()
         url = self._url
         if resource:
@@ -146,7 +248,7 @@ class BluelivRequest(BASERequestModel):
             print('> BluelivRequest.request for compound url [%s].' % url)
 
         if files:
-            POST = True
+            use_post = True
             json_format = False
 
         if DEBUG is True:
@@ -156,94 +258,92 @@ class BluelivRequest(BASERequestModel):
             if DEBUG is True:
                 print('request called with no params parameter.')
 
-            if POST is False:
+            if use_post is False:
                 if DEBUG is True:
-                    print('request POST is False.')
+                    print('request use_post is False.')
 
-                r = requests.get(url, headers=self._headers)
+                res = requests.get(url, headers=self._headers)
             else:
                 if DEBUG is True:
                     print('request POST is True.')
 
                 if json_format is True:
                     if DEBUG is True:
-                        print('request POST is True: [JSON FORMAT]')
+                        print('request use_post is True: [JSON FORMAT]')
 
-                    r = requests.post(url, headers=self._headers, json=data)
+                    res = requests.post(url, headers=self._headers, json=data)
                 else:
                     if files:
-                        r = requests.post(url,
-                                          headers=self._headers,
-                                          files=files)
+                        res = requests.post(url,
+                                            headers=self._headers,
+                                            files=files)
                     else:
-                        r = requests.post(url,
-                                          headers=self._headers,
-                                          data=data)
+                        res = requests.post(url,
+                                            headers=self._headers,
+                                            data=data)
         else:
             if DEBUG is True:
                 print('request called with params: [%s].' % str(params))
 
-            if POST is False:
+            if use_post is False:
                 if DEBUG is True:
-                    print('request POST is False.')
+                    print('request use_post is False.')
 
-                r = requests.get(url, headers=self._headers, params=params)
+                res = requests.get(url,
+                                   headers=self._headers,
+                                   params=params)
             else:
                 if DEBUG is True:
                     print('request POST is False.')
 
                 if json_format is True:
                     if DEBUG is True:
-                        print('request POST is True: [JSON FORMAT].')
+                        print('request use_post is True: [JSON FORMAT].')
 
-                    r = requests.post(url,
-                                      headers=self._headers,
-                                      params=params,
-                                      json=data)
+                    res = requests.post(url,
+                                        headers=self._headers,
+                                        params=params,
+                                        json=data)
                 else:
                     if files:
-                        r = requests.post(url,
-                                          headers=self._headers,
-                                          params=params,
-                                          files=files)
+                        res = requests.post(url,
+                                            headers=self._headers,
+                                            params=params,
+                                            files=files)
                     else:
-                        r = requests.post(url,
-                                          headers=self._headers,
-                                          params=params,
-                                          data=data)
+                        res = requests.post(url,
+                                            headers=self._headers,
+                                            params=params,
+                                            data=data)
 
-        if r.status_code == 200:
+        if res.status_code == 200:
             if DEBUG is True:
                 print('request RESULT STATUS [200]. OK.')
 
-            result = r.json()
+            result = res.json()
             if result:
                 if as_json is True:
                     return result
-                else:
-                    return json.dumps(result)
-            else:
-                return None
-        elif r.status_code == 400:
+                return json.dumps(result)
+            return None
+        elif res.status_code == 400:
             if DEBUG is True:
-                print('> BluelivRequest.request RESULT STATUS [400]. ERROR.')
+                print('request RESULT STATUS [400]. ERROR.')
 
-            raise Exception('[%s]: Error in request [%d]: %s' % (url,
-                                                                 r.status_code,
-                                                                 r.content))
-
-        elif r.status_code == 422:
+            raise Exception('[%s]: Error request [400]: %s' % (url,
+                                                               res.content))
+        elif res.status_code == 422:
             if DEBUG is True:
                 print('request RESULT STATUS [422]. ERROR.')
 
-            raise Exception('[%s]: Error in term [%d]: %s' % (url,
-                                                              r.status_code,
-                                                              str(r.content)))
-        else:
-            if DEBUG is True:
-                print('request STATUS [%d]. UNEXPECTED.' % r.status_code)
-            raise Exception('[%s]: Exception code [%d]' % (url,
-                                                           r.status_code))
+            raise Exception('[%s]: Error request [422]: %s' % (url,
+                                                               res.content))
+
+        if DEBUG is True:
+            print('request STATUS [%d]. UNEXPECTED.' % res.status_code)
+
+        raise Exception('[%s]: Exception code [%d]' % (url,
+                                                       res.status_code))
 
     def search(self,
                search_term: str,
@@ -251,6 +351,18 @@ class BluelivRequest(BASERequestModel):
                limit: int = 0,
                since_id: int = 0,
                as_json: bool = True):
+        """
+        This is the search metjod that will be available for all subclasses
+        that inherit from the core one.
+
+        :param search_term: the term we want to search.
+        :param tag: if we are searching a tag, the tag we want to searcg.
+        :param limit: the maximum number of items we want to receive.
+        :param since_id: the reference id from we want to receive results.
+        :param as_json: if we want the response as a JSON document.
+        :return: the results as list or JSON.
+
+        """
         if self._category == 'core':
             raise Exception('CORE is not searchable.')
 
