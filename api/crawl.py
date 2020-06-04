@@ -3,12 +3,17 @@ from .core import BluelivRequest
 
 
 class CrawlerRequest(BluelivRequest):
-    _category = 'crawl'
-    _base_url = '/crawl'
+    _category = None
+    _base_url = None
     term = None
     is_text = False
 
     def __init__(self, *args, **kwargs):
+        self._category = 'crawl'
+        self._base_url = '/crawl'
+        self.term = None
+        self.is_text = False
+
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -25,7 +30,7 @@ class CrawlerRequest(BluelivRequest):
 
         super().__init__(token=self._custom_token)
 
-    def crawl(self, term, is_text=False):
+    def crawl(self, term:str, is_text:bool=False):
         data = {
             'url': term,
             'text': is_text
