@@ -1,3 +1,5 @@
+import typing
+
 from . import configuration
 from .core import BASEModel, BluelivRequest
 
@@ -44,13 +46,11 @@ class Spark(BASEModel):
 
 
 class SparksRequest(BluelivRequest):
-    _category: str = None
-    _base_url: str = None
-    _sparks_iocs_url: str = None
-    _timeline_url: str = None
-    _discover_url: str = None
-    limit = None
-    since_id = None
+    _category: str = ''
+    _base_url: str = ''
+    _sparks_iocs_url: str = ''
+    _timeline_url: str = ''
+    _discover_url: str = ''
 
     def __init__(self, *args, **kwargs):
         self._category = 'sparks'
@@ -79,26 +79,23 @@ class SparksRequest(BluelivRequest):
         else:
             self._discover_url = configuration.BASE_SPARKS_DISCOVER_URL
 
-        if 'iocs' in kwargs:
-            self._sparks_iocs_url = kwargs.get('iocs', '/iocs')
-        else:
-            self._sparks_iocs_url = configuration.BASE_SPARKS_IOCS_URL
-
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
             self.limit = kwargs.get('since_id', None)
 
-        super().__init__(token=self._custom_token)
+        super().__init__(token=self._custom_token,
+                         base_url=self._base_url)
 
-    def get(self, spark_id: str):
+    def get(self,
+            spark_id: str):
         resource_url = '%s/%s' % (self._base_url, spark_id)
+        return self.request(resource=resource_url)
 
-        results = self.request(resource=resource_url)
-        return results
-
-    def timeline(self, limit=None, since_id=None):
+    def timeline(self,
+                 limit: typing.Optional[str] = None,
+                 since_id: typing.Optional[str] = None):
         params = {}
         resource_url = '%s%s' % (self._base_url,
                                  self._timeline_url)
@@ -109,12 +106,12 @@ class SparksRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
+        return self.request(resource=resource_url,
+                            params=params)
 
-        return results
-
-    def discover(self, limit=None, since_id=None):
+    def discover(self,
+                 limit: typing.Optional[str] = None,
+                 since_id: typing.Optional[str] = None):
         params = {}
         resource_url = '%s%s' % (self._base_url,
                                  self._discover_url)
@@ -125,12 +122,13 @@ class SparksRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
+        return self.request(resource=resource_url,
+                            params=params)
 
-        return results
-
-    def iocs(self, spark_id, limit=None, since_id=None):
+    def iocs(self,
+             spark_id,
+             limit: typing.Optional[str] = None,
+             since_id: typing.Optional[str] = None):
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
                                     spark_id,
@@ -142,17 +140,15 @@ class SparksRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self.request(resource=resource_url,
+                            params=params)
 
     def publish(self, title: str, description: str,
                 tlp: str = 'green',
-                source_urls=None,
+                source_urls: typing.Optional[list] = None,
                 source_malware_id: str = None,
-                tags=None,
-                iocs=None):
+                tags: typing.Optional[list] = None,
+                iocs: typing.Optional[list] = None):
         resource_url = self._base_url
         data = dict()
 
@@ -171,8 +167,7 @@ class SparksRequest(BluelivRequest):
         if iocs:
             data['iocs'] = iocs
 
-        results = self.request(resource=resource_url,
-                               POST=True,
-                               data=data,
-                               json_format=True)
-        return results
+        return self.request(resource=resource_url,
+                            POST=True,
+                            data=data,
+                            json_format=True)
