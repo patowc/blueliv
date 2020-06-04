@@ -12,11 +12,15 @@ from .configuration import (
 from .core import BASEModel, BluelivRequest
 
 
-class Spark(BASEModel):
+class Spark(BASEModel):  # pylint: disable=too-few-public-methods
     """
     This is the base class to hold Spark data (derived from BASEModel).
 
     """
+
+    # pylint: disable=too-many-instance-attributes
+    # 17 elements, but are all used.
+
     spark_id = None
     title = None
     description = None
@@ -62,6 +66,10 @@ class SparksRequest(BluelivRequest):
     A class to be able to deal with Sparks (retrieve and publish).
 
     """
+
+    # pylint: disable=too-many-instance-attributes
+    # 7 elements, but are all used.
+
     _category: str = ''
     _base_url: str = ''
     _sparks_iocs_url: str = ''
@@ -193,7 +201,7 @@ class SparksRequest(BluelivRequest):
         return self.request(resource=resource_url,
                             params=params)
 
-    def publish(self, title: str, description: str,
+    def publish(self, title: str, description: str,  # pylint: disable=too-many-arguments
                 tlp: str = 'green',
                 source_urls: typing.Optional[list] = None,
                 source_malware_id: str = None,
