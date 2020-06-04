@@ -45,11 +45,14 @@ class BluelivUser(BASEModel):  # pylint: disable=too-few-public-methods
         super().__init__()
 
 
-class UsersRequest(BluelivRequest):  # pylint: disable=too-many-instance-attributes
+class UsersRequest(BluelivRequest):
     """
     Model to perfom requests for user information.
 
     """
+
+    # pylint: disable=too-many-instance-attributes
+
     _category: str = ''
     _base_url: str = ''
     _users_sparks_url: str = ''
