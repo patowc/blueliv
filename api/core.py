@@ -47,6 +47,10 @@ class BASEModel:
         self._instance_counter += 1
 
     def get_instance_counter(self):
+        """
+        A getter for the instance counter.
+        :return: _instance_counter
+        """
         return self._instance_counter
 
 
