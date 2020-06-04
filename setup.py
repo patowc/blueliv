@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="blueliv-patowc",
-    version="0.0.1",
+    version="0.0.9",
     author="Román Ramírez",
     author_email="rramirez@rootedcon.com",
     description="Blueliv's API encapsulation",
