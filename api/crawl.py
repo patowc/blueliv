@@ -39,7 +39,7 @@ class CrawlerRequest(BluelivRequest):
         resource_url = self._base_url
 
         results = self.request(resource=resource_url,
-                               POST=True,
+                               use_post=True,
                                data=data,
                                json_format=True)
 
