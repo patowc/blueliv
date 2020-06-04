@@ -5,7 +5,7 @@ from .core import BASEModel, BluelivRequest
 
 
 class Tag(BASEModel):
-    tag_id = None
+    tag_id: typing.Optional[str] = None
     name: typing.Optional[str] = None
     questions_count: int = 0
     slug: typing.Optional[str] = None
@@ -27,8 +27,6 @@ class TagsRequest(BluelivRequest):
     _tags_sparks_url: typing.Optional[str] = None
     _tags_iocs_url: typing.Optional[str] = None
     tag_slug: typing.Optional[str] = None
-    limit = None
-    since_id = None
 
     def __init__(self, *args, **kwargs):
         self._category = 'tags'
@@ -66,11 +64,11 @@ class TagsRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.since_id = kwargs.get('since_id', None)
 
-        super().__init__(token=self._custom_token)
+        super().__init__(token=self._custom_token,
+                         base_url=self._base_url)
 
     def list(self):
-        results = self.request(resource=self._base_url)
-        return results
+        return self.request(resource=self._base_url)
 
     def list_sparks(self,
                     tag_slug: str,
@@ -87,10 +85,8 @@ class TagsRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self.request(resource=resource_url,
+                            params=params)
 
     def list_iocs(self, tag_slug: str,
                   limit: typing.Optional[str] = None,
@@ -106,7 +102,5 @@ class TagsRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self.request(resource=resource_url,
+                            params=params)
