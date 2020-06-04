@@ -170,6 +170,6 @@ class SparksRequest(BluelivRequest):
             data['iocs'] = iocs
 
         return self.request(resource=resource_url,
-                            POST=True,
+                            use_post=True,
                             data=data,
                             json_format=True)
