@@ -1,6 +1,7 @@
-from .. import configuration
 import requests
 import json
+
+from .. import configuration
 
 
 class BASEModel:
