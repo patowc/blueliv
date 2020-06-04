@@ -46,6 +46,9 @@ class BASEModel:
         '''
         self._instance_counter += 1
 
+    def get_instance_counter(self):
+        return self._instance_counter
+
 
 class BASERequestModel:
     """BASERequestModel is the root class for any request based module. This
