@@ -118,7 +118,12 @@ class SparksRequest(BluelivRequest):
 
         return results
 
-    def publish(self, title, description, tlp='green', source_urls=None, source_malware_id=None, tags=None, iocs=None):
+    def publish(self, title, description,
+                tlp='green',
+                source_urls=None,
+                source_malware_id=None,
+                tags=None,
+                iocs=None):
         resource_url = self._base_url
         data = dict()
 
