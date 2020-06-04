@@ -22,10 +22,10 @@ class Tag(BASEModel):
 
 
 class TagsRequest(BluelivRequest):
-    _category: typing.Optional[str] = None
-    _base_url: typing.Optional[str] = None
-    _tags_sparks_url: typing.Optional[str] = None
-    _tags_iocs_url: typing.Optional[str] = None
+    _category: str = ''
+    _base_url: str = ''
+    _tags_sparks_url: str = ''
+    _tags_iocs_url: str = ''
     tag_slug: typing.Optional[str] = None
 
     def __init__(self, *args, **kwargs):
