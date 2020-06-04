@@ -2,7 +2,13 @@ import typing
 import requests
 import json
 
-from .configuration import *
+from .configuration import (
+    DEBUG,
+    VERSION,
+    BASE_API_URL, BASE_SEARCH_URL,
+    TOKEN,
+    AUTHORIZATION, AUTHORIZATION_FORMAT, AUTHORIZATION_HEADER
+)
 
 
 class BASEModel:
