@@ -1,3 +1,7 @@
+"""
+Module to deal and manage IoCs.
+
+"""
 from .configuration import (
     BASE_IOCS_URL, BASE_IOCS_TIMELINE_URL, BASE_IOCS_DISCOVER_URL
 )
@@ -22,7 +26,11 @@ BluelivIOCSubtypes = (
 )
 
 
-class BluelivIOC(BASEModel):
+class BluelivIOC(BASEModel):  # pylint: disable=too-few-public-methods
+    """
+    Model to store IOC information.
+
+    """
     spark_id = None
     ioc_id = None
     content = None
@@ -30,7 +38,7 @@ class BluelivIOC(BASEModel):
     ioc_subtype = None
     created_at = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         if 'spark_id' in kwargs:
             self.spark_id = kwargs.get('spark_id', None)
 
@@ -53,6 +61,10 @@ class BluelivIOC(BASEModel):
 
 
 class IocsRequest(BluelivRequest):
+    """
+    Model to be able to deal with IoC requests.
+
+    """
     _category = 'iocs'
     _base_url = '/iocs'
     _iocs_types_url = '/types'
@@ -61,7 +73,7 @@ class IocsRequest(BluelivRequest):
     limit = None
     since_id = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -89,16 +101,36 @@ class IocsRequest(BluelivRequest):
         super().__init__(token=self._custom_token)
 
     def _private_request(self, resource_url: str, params: dict):
+        """
+        This is a wrapper method to reduce code and make it cleaner.
+
+        :param resource_url: the url to send the request.
+        :param params: all the parameters for the request.
+        :return: dict, list or JSON.
+        """
         return self.request(resource=resource_url,
                             params=params)
 
     def types(self):
+        """
+        Retrieve a list of available types on the Community.
+
+        :return: dict, list or JSON.
+        """
         resource = '%s%s' % (self._base_url,
                              self._iocs_types_url)
         results = self.request(resource=resource)
         return results
 
     def timeline(self, limit=None, since_id=None):
+        """
+        Retrieve the latest IoCs with a timestamp mark.
+
+        :param limit: the maximum number of item we want to receive.
+        :param since_id: the reference since we want to get the information.
+        :return: list, dict or JSON.
+
+        """
         params = {}
 
         if since_id:
@@ -114,6 +146,14 @@ class IocsRequest(BluelivRequest):
                                      params=params)
 
     def discover(self, limit=None, since_id=None):
+        """
+        Retrieve the latest sparks and IoC information published.
+
+        :param limit: the maximum number of item we want to receive.
+        :param since_id: the reference since we want to get the information.
+        :return: list, dict or JSON.
+
+        """
         params = {}
         resource_url = '%s%s' % (self._base_url,
                                  self._iocs_discover_url)
