@@ -76,9 +76,19 @@ class BASERequestModel:
         self.token = 'invalid-token'
 
     def get_token(self):
+        """
+        A getter for the token value in the request class.
+
+        :return: token value
+        """
         return self.token
 
     def get_version(self):
+        """
+        A getter for the version value in the request class.
+
+        :return: token value
+        """
         return self.version
 
 
