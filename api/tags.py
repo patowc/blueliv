@@ -1,6 +1,9 @@
 import typing
 
-from . import configuration
+from .configuration import (
+    BASE_TAGS_URL, BASE_TAGS_SPARKS_URL, BASE_TAGS_IOCS_URL
+)
+
 from .core import BASEModel, BluelivRequest
 
 
@@ -43,17 +46,17 @@ class TagsRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/tags')
         else:
-            self._base_url = configuration.BASE_TAGS_URL
+            self._base_url = BASE_TAGS_URL
 
         if 'sparks' in kwargs:
             self._tags_sparks_url = kwargs.get('sparks', '/sparks')
         else:
-            self._tags_sparks_url = configuration.BASE_TAGS_SPARKS_URL
+            self._tags_sparks_url = BASE_TAGS_SPARKS_URL
 
         if 'iocs' in kwargs:
             self._tags_iocs_url = kwargs.get('iocs', '/iocs')
         else:
-            self._tags_iocs_url = configuration.BASE_TAGS_IOCS_URL
+            self._tags_iocs_url = BASE_TAGS_IOCS_URL
 
         if 'tag_slug' in kwargs:
             self.tag_slug = kwargs.get('tag_slug', None)
