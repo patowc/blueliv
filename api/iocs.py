@@ -1,4 +1,7 @@
-from . import configuration
+from .configuration import (
+    BASE_IOCS_URL, BASE_IOCS_TIMELINE_URL, BASE_IOCS_DISCOVER_URL
+)
+
 from .core import BASEModel, BluelivRequest
 
 
@@ -65,17 +68,17 @@ class IocsRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/iocs')
         else:
-            self._base_url = configuration.BASE_IOCS_URL
+            self._base_url = BASE_IOCS_URL
 
         if 'timeline' in kwargs:
             self._iocs_timeline_url = kwargs.get('timeline', '/timeline')
         else:
-            self._iocs_timeline_url = configuration.BASE_IOCS_TIMELINE_URL
+            self._iocs_timeline_url = BASE_IOCS_TIMELINE_URL
 
         if 'discover' in kwargs:
             self._iocs_discover_url = kwargs.get('discover', '/discover')
         else:
-            self._iocs_discover_url = configuration.BASE_IOCS_DISCOVER_URL
+            self._iocs_discover_url = BASE_IOCS_DISCOVER_URL
 
         if 'limit' in kwargs:
             self.limit = kwargs.get('limit', None)
