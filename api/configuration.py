@@ -1,12 +1,20 @@
+"""
+Here you will find all configuration variables that can be configured through
+the environment.
+
+A quick way to find every available setting is to grep for "ENV_*".
+
+The standard approach here is to set a default value and, then, if
+the environment has the proper variable, set again with the value that
+was defined in the env.
+
+"""
 import os
 
 DEBUG = None
 DEBUG = os.getenv('BLUELIV_API_DEBUG',
                   DEBUG)
-if DEBUG:
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = bool(DEBUG)
 # ENV: BLUELIV_API_DEBUG
 
 VERSION = 'v1'
