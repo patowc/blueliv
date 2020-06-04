@@ -71,13 +71,13 @@ class BASERequestModel:
     # pylint: disable=too-few-public-methods
     # Base model (consider it as an interface)
 
-    version = None
-    token = None
+    version: str = None
+    token: str = None
 
-    def __init__(self):
+    def __init__(self, token: str):
         self.version = VERSION
         # token is set to a fixed, invalid, string initially.
-        self.token = 'invalid-token'
+        self.token = token
 
     def get_token(self):
         """
@@ -201,7 +201,7 @@ class BluelivRequest(BASERequestModel):
         self._authorization_header = AUTHORIZATION_HEADER
         self._headers = {self._authorization_header: self._authorization}
 
-        super().__init__()
+        super().__init__(token=self.token)
 
     def get_category(self):
         """
