@@ -31,11 +31,14 @@ class Tag(BASEModel):  # pylint: disable=too-few-public-methods
         super().__init__()
 
 
-class TagsRequest(BluelivRequest):  # pylint: disable=too-many-instance-attributes
+class TagsRequest(BluelivRequest):
     """
     The model to perform and deal with the requests.
 
     """
+
+    # pylint: disable=too-many-instance-attributes
+
     _category: str = ''
     _base_url: str = ''
     _tags_sparks_url: str = ''
