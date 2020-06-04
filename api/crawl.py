@@ -1,4 +1,4 @@
-from . import configuration
+from .configuration import BASE_CRAWL_URL
 from .core import BluelivRequest
 
 
@@ -20,7 +20,7 @@ class CrawlerRequest(BluelivRequest):
         if 'base_url' in kwargs:
             self._base_url = kwargs.get('base_url', '/crawl')
         else:
-            self._base_url = configuration.BASE_CRAWL_URL
+            self._base_url = BASE_CRAWL_URL
 
         if 'term' in kwargs:
             self.term = kwargs.get('term', None)
