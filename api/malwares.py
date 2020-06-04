@@ -1,4 +1,4 @@
-from .. import configuration
+from . import configuration
 from .core import BASEModel, BluelivRequest
 
 

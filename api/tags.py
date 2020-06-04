@@ -1,25 +1,44 @@
-from .. import configuration
+import typing
+
+from . import configuration
 from .core import BASEModel, BluelivRequest
 
 
 class Tag(BASEModel):
     tag_id = None
-    name = None
-    questions_count = 0
-    slug = None
-    sparks_count = 0
+    name: typing.Optional[str] = None
+    questions_count: int = 0
+    slug: typing.Optional[str] = None
+    sparks_count: int = 0
+
+    def __init__(self):
+        self.tag_id = None
+        self.name = None
+        self.questions_count = 0
+        self.slug = None
+        self.sparks_count = 0
+
+        super().__init__()
 
 
 class TagsRequest(BluelivRequest):
-    _category = 'tags'
-    _base_url = '/tags'
-    _tags_sparks_url = '/sparks'
-    _tags_iocs_url = '/iocs'
-    tag_slug = None
+    _category: typing.Optional[str] = None
+    _base_url: typing.Optional[str] = None
+    _tags_sparks_url: typing.Optional[str] = None
+    _tags_iocs_url: typing.Optional[str] = None
+    tag_slug: typing.Optional[str] = None
     limit = None
     since_id = None
 
     def __init__(self, *args, **kwargs):
+        self._category = 'tags'
+        self._base_url = '/tags'
+        self._tags_sparks_url = '/sparks'
+        self._tags_iocs_url = '/iocs'
+        self.tag_slug = None
+        self.limit = None
+        self.since_id = None
+
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -53,7 +72,10 @@ class TagsRequest(BluelivRequest):
         results = self.request(resource=self._base_url)
         return results
 
-    def list_sparks(self, tag_slug, limit=None, since_id=None):
+    def list_sparks(self,
+                    tag_slug: str,
+                    limit: typing.Optional[str] = None,
+                    since_id: typing.Optional[str] = None):
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
                                     tag_slug,
@@ -70,7 +92,9 @@ class TagsRequest(BluelivRequest):
 
         return results
 
-    def list_iocs(self, tag_slug, limit=None, since_id=None):
+    def list_iocs(self, tag_slug: str,
+                  limit: typing.Optional[str] = None,
+                  since_id: typing.Optional[str] = None):
         params = {}
         resource_url = '%s/%s%s' % (self._base_url,
                                     tag_slug,

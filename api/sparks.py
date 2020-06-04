@@ -1,4 +1,4 @@
-from .. import configuration
+from . import configuration
 from .core import BASEModel, BluelivRequest
 
 
@@ -6,7 +6,7 @@ class Spark(BASEModel):
     spark_id = None
     title = None
     description = None
-    tlp = 'red'
+    tlp = None
     created_at = None
     likes_count = None
     spark_created_at = None
@@ -21,17 +21,46 @@ class Spark(BASEModel):
     user = {}
     original_spark = {}
 
+    def __init__(self):
+        self.spark_id = None
+        self.title = None
+        self.description = None
+        self.tlp = 'red'
+        self.created_at = None
+        self.likes_count = None
+        self.spark_created_at = None
+        self.source_url = []
+        self.weight = None
+        self.geo_domains = []
+        self.geo_ips = []
+        self.geo_points = []
+        self.resparks_count = 0
+        self.iocs_counters = {}
+        self.tags = []
+        self.user = {}
+        self.original_spark = {}
+
+        super().__init__()
+
 
 class SparksRequest(BluelivRequest):
-    _category = 'sparks'
-    _base_url = '/sparks'
-    _sparks_iocs_url = '/iocs'
-    _timeline_url = '/timeline'
-    _discover_url = '/discover'
+    _category: str = None
+    _base_url: str = None
+    _sparks_iocs_url: str = None
+    _timeline_url: str = None
+    _discover_url: str = None
     limit = None
     since_id = None
 
     def __init__(self, *args, **kwargs):
+        self._category = 'sparks'
+        self._base_url = '/sparks'
+        self._sparks_iocs_url = '/iocs'
+        self._timeline_url = '/timeline'
+        self._discover_url = '/discover'
+        self.limit = None
+        self.since_id = None
+
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -63,7 +92,7 @@ class SparksRequest(BluelivRequest):
 
         super().__init__(token=self._custom_token)
 
-    def get(self, spark_id):
+    def get(self, spark_id: str):
         resource_url = '%s/%s' % (self._base_url, spark_id)
 
         results = self.request(resource=resource_url)
@@ -118,10 +147,10 @@ class SparksRequest(BluelivRequest):
 
         return results
 
-    def publish(self, title, description,
-                tlp='green',
+    def publish(self, title: str, description: str,
+                tlp: str = 'green',
                 source_urls=None,
-                source_malware_id=None,
+                source_malware_id: str = None,
                 tags=None,
                 iocs=None):
         resource_url = self._base_url

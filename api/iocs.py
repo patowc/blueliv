@@ -1,4 +1,4 @@
-from .. import configuration
+from . import configuration
 from .core import BASEModel, BluelivRequest
 
 
@@ -85,6 +85,10 @@ class IocsRequest(BluelivRequest):
 
         super().__init__(token=self._custom_token)
 
+    def _private_request(self, resource_url: str, params: dict):
+        return self.request(resource=resource_url,
+                            params=params)
+
     def types(self):
         resource = '%s%s' % (self._base_url,
                              self._iocs_types_url)
@@ -93,8 +97,6 @@ class IocsRequest(BluelivRequest):
 
     def timeline(self, limit=None, since_id=None):
         params = {}
-        resource_url = '%s%s' % (self._base_url,
-                                 self._iocs_timeline_url)
 
         if since_id:
             params['since_id'] = since_id
@@ -102,10 +104,11 @@ class IocsRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
+        resource_url = '%s%s' % (self._base_url,
+                                 self._iocs_timeline_url)
 
-        return results
+        return self._private_request(resource_url=resource_url,
+                                     params=params)
 
     def discover(self, limit=None, since_id=None):
         params = {}
@@ -118,7 +121,5 @@ class IocsRequest(BluelivRequest):
         if limit:
             params['limit'] = limit
 
-        results = self.request(resource=resource_url,
-                               params=params)
-
-        return results
+        return self._private_request(resource_url=resource_url,
+                                     params=params)
