@@ -261,7 +261,7 @@ class BluelivRequest(BASERequestModel):
             as_json = kwargs.get('as_json', False)
 
         if DEBUG is True:
-            print('> BluelivRequest.request called.')
+            print('request called.')
 
         if use_post is True and data is None:
             raise Exception('If use_post=True, must provide data (was None)')
@@ -282,7 +282,7 @@ class BluelivRequest(BASERequestModel):
         self._last_url_invoked = url
 
         if DEBUG is True:
-            print('> BluelivRequest.request for compound url [%s].' % url)
+            print('request for compound url [%s].' % url)
 
         if files:
             use_post = True
