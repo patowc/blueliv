@@ -30,7 +30,7 @@ class CrawlerRequest(BluelivRequest):
 
         super().__init__(token=self._custom_token)
 
-    def crawl(self, term:str, is_text:bool=False):
+    def crawl(self, term: str, is_text: bool = False):
         data = {
             'url': term,
             'text': is_text
