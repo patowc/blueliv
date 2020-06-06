@@ -2,6 +2,8 @@
 Module to deal and manage IoCs.
 
 """
+import typing
+
 from .configuration import (
     BASE_IOCS_URL, BASE_IOCS_TIMELINE_URL, BASE_IOCS_DISCOVER_URL
 )
@@ -65,15 +67,21 @@ class IocsRequest(BluelivRequest):
     Model to be able to deal with IoC requests.
 
     """
-    _category = 'iocs'
-    _base_url = '/iocs'
-    _iocs_types_url = '/types'
-    _iocs_timeline_url = '/timeline'
-    _iocs_discover_url = '/discover'
-    limit = None
-    since_id = None
+    _iocs_types_url: str = '/types'
+    _iocs_timeline_url: str = '/timeline'
+    _iocs_discover_url: str = '/discover'
+    limit: typing.Optional[str] = None
+    since_id: typing.Optional[str] = None
 
     def __init__(self, **kwargs):
+        self._category = 'iocs'
+        self._base_url = '/iocs'
+        self._iocs_types_url = '/types'
+        self._iocs_timeline_url = '/timeline'
+        self._iocs_discover_url = '/discover'
+        self.limit = None
+        self.since_id = None
+
         if 'token' in kwargs:
             self._custom_token = kwargs.get('token', None)
 
@@ -81,6 +89,9 @@ class IocsRequest(BluelivRequest):
             self._base_url = kwargs.get('base_url', '/iocs')
         else:
             self._base_url = BASE_IOCS_URL
+
+        if 'category' in kwargs:
+            self._category = kwargs.get('category', 'iocs')
 
         if 'timeline' in kwargs:
             self._iocs_timeline_url = kwargs.get('timeline', '/timeline')
@@ -96,11 +107,13 @@ class IocsRequest(BluelivRequest):
             self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
-            self.limit = kwargs.get('since_id', None)
+            self.is_text = kwargs.get('since_id', False)
 
         super().__init__(token=self._custom_token,
                          base_url=self._base_url,
-                         category=self._category)
+                         category=self._category,
+                         limit=self.limit,
+                         since_id=self.since_id)
 
     def _private_request(self, resource_url: str, params: dict):
         """
