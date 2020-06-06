@@ -11,10 +11,10 @@ class CrawlerRequest(BluelivRequest):
     Class to be able to deal with the requests to crawl information.
 
     """
-    _category = None
-    _base_url = None
-    term = None
-    is_text = False
+    _category: str = None
+    _base_url: str = None
+    term: str = None
+    is_text: bool = False
 
     def __init__(self, **kwargs):
         self._category = 'crawl'
