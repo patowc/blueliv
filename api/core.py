@@ -203,10 +203,10 @@ class BluelivRequest(BASERequestModel):
             self._base_url = kwargs.get('base_url', '')
 
         if 'limit' in kwargs:
-            self._base_url = kwargs.get('limit', None)
+            self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
-            self._base_url = kwargs.get('since_id', None)
+            self.since_id = kwargs.get('since_id', None)
 
         self._url = BASE_API_URL
         self._authorization_header = AUTHORIZATION_HEADER
