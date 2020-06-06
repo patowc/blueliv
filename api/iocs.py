@@ -98,7 +98,8 @@ class IocsRequest(BluelivRequest):
         if 'since_id' in kwargs:
             self.limit = kwargs.get('since_id', None)
 
-        super().__init__(token=self._custom_token)
+        super().__init__(token=self._custom_token,
+                         category=self._category)
 
     def _private_request(self, resource_url: str, params: dict):
         """
