@@ -36,7 +36,8 @@ class CrawlerRequest(BluelivRequest):
         if 'is_text' in kwargs:
             self.is_text = kwargs.get('is_text', False)
 
-        super().__init__(token=self._custom_token)
+        super().__init__(token=self._custom_token,
+                         category=self._category)
 
     def crawl(self, term: str, is_text: bool = False):
         """
