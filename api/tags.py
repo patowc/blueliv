@@ -39,8 +39,6 @@ class TagsRequest(BluelivRequest):
 
     # pylint: disable=too-many-instance-attributes
 
-    _category: str = ''
-    _base_url: str = ''
     _tags_sparks_url: str = ''
     _tags_iocs_url: str = ''
     tag_slug: typing.Optional[str] = None
@@ -79,10 +77,13 @@ class TagsRequest(BluelivRequest):
             self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
-            self.since_id = kwargs.get('since_id', None)
+            self.is_text = kwargs.get('since_id', False)
 
         super().__init__(token=self._custom_token,
-                         base_url=self._base_url)
+                         base_url=self._base_url,
+                         category=self._category,
+                         limit=self.limit,
+                         since_id=self.since_id)
 
     def list(self):
         """

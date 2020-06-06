@@ -11,8 +11,6 @@ class CrawlerRequest(BluelivRequest):
     Class to be able to deal with the requests to crawl information.
 
     """
-    _category: str = None
-    _base_url: str = None
     term: str = None
     is_text: bool = False
 
@@ -36,9 +34,17 @@ class CrawlerRequest(BluelivRequest):
         if 'is_text' in kwargs:
             self.is_text = kwargs.get('is_text', False)
 
+        if 'limit' in kwargs:
+            self.limit = kwargs.get('limit', None)
+
+        if 'since_id' in kwargs:
+            self.is_text = kwargs.get('since_id', False)
+
         super().__init__(token=self._custom_token,
                          base_url=self._base_url,
-                         category=self._category)
+                         category=self._category,
+                         limit=self.limit,
+                         since_id=self.since_id)
 
     def crawl(self, term: str, is_text: bool = False):
         """

@@ -53,8 +53,6 @@ class UsersRequest(BluelivRequest):
 
     # pylint: disable=too-many-instance-attributes
 
-    _category: str = ''
-    _base_url: str = ''
     _users_sparks_url: str = ''
     _users_iocs_url: str = ''
     username: typing.Optional[str] = None
@@ -76,6 +74,9 @@ class UsersRequest(BluelivRequest):
         else:
             self._base_url = BASE_USERS_URL
 
+        if 'category' in kwargs:
+            self._category = kwargs.get('category', 'users')
+
         if 'username' in kwargs:
             self.username = kwargs.get('username', None)
 
@@ -83,10 +84,13 @@ class UsersRequest(BluelivRequest):
             self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
-            self.since_id = kwargs.get('since_id', None)
+            self.is_text = kwargs.get('since_id', False)
 
         super().__init__(token=self._custom_token,
-                         base_url=self._base_url)
+                         base_url=self._base_url,
+                         category=self._category,
+                         limit=self.limit,
+                         since_id=self.since_id)
 
     def me(self):  # pylint: disable=invalid-name
         """

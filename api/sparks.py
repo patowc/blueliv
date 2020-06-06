@@ -93,6 +93,9 @@ class SparksRequest(BluelivRequest):
         else:
             self._base_url = BASE_SPARKS_URL
 
+        if 'category' in kwargs:
+            self._category = kwargs.get('category', 'sparks')
+
         if 'timeline' in kwargs:
             self._timeline_url = kwargs.get('timeline', '/timeline')
         else:
@@ -107,11 +110,13 @@ class SparksRequest(BluelivRequest):
             self.limit = kwargs.get('limit', None)
 
         if 'since_id' in kwargs:
-            self.limit = kwargs.get('since_id', None)
+            self.is_text = kwargs.get('since_id', False)
 
         super().__init__(token=self._custom_token,
                          base_url=self._base_url,
-                         category=self._category)
+                         category=self._category,
+                         limit=self.limit,
+                         since_id=self.since_id)
 
     def get(self,
             spark_id: str):
