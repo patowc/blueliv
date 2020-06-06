@@ -110,7 +110,8 @@ class SparksRequest(BluelivRequest):
             self.limit = kwargs.get('since_id', None)
 
         super().__init__(token=self._custom_token,
-                         base_url=self._base_url)
+                         base_url=self._base_url,
+                         category=self._category)
 
     def get(self,
             spark_id: str):
