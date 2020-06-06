@@ -5,6 +5,14 @@ You can fin all the details related to this API in https://community.blueliv.com
 
 Once registered and with a valid token, you can perform several actions on the Community sandbox and Threat Intel platform, from searching IoCs, sparks, tags... to publishing throught the API.
 
+You may use token in two ways:
+
+- In an explicit way, passing the token in the class constructor (for example, `SparksRequest(token=token)`)
+- In an implicit way setting the environment variable (`BLUELIV_API_TOKEN='your token'`)
+
+The implicit way is added to be able to deal with the package in contexts where environment variables are used to change the behaviour of applications and resources. For example, in docker containers, Heroku, etc.
+
+
 ## Structure
 
 Here you will find a description of the classes and methods you may take advantage of.
