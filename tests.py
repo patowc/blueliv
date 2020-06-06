@@ -46,7 +46,17 @@ from api.users import BluelivUser, UsersRequest
 
 
 class EnvironmentTests(unittest.TestCase):
+    """
+    Tests oriented to verify configuration variables and if they can be set
+    through the enviroment.
+
+    """
     def test_configuration(self):
+        """
+        Test configuration defaults.
+        :return: nothing as is a test case.
+
+        """
         self.assertEqual(DEBUG, False)
         self.assertEqual(VERSION, 'v1')
         self.assertEqual(TOKEN, 'invalid-token')
@@ -73,13 +83,31 @@ class EnvironmentTests(unittest.TestCase):
         self.assertEqual(BASE_SEARCH_URL, '/search')
 
     def test_environment(self):
+        """
+        Test we can retrieve from env, falling back on default values, and
+        setting a value in the environment.
+
+        :return: nothing as is a test case.
+
+        """
         os.environ['BLUELIV_API_DEBUG'] = 'True'
         DEBUG = os.getenv('BLUELIV_API_DEBUG', False)
         self.assertEqual(DEBUG, 'True')
 
 
 class ModelsTests(unittest.TestCase):
+    """
+    Test oriented to create model instances and verify everything is working
+    fine in the constructors.
+
+    """
     def test_core_models(self):
+        """
+        Test for api.core models.
+
+        :return:  nothing as is a test case.
+
+        """
         base_model = BASEModel()
         self.assertNotEqual(base_model, None)
 
@@ -96,10 +124,22 @@ class ModelsTests(unittest.TestCase):
         self.assertNotEqual(blueliv_request_model.get_token(), 'invalid-token')
 
     def test_crawl_models(self):
+        """
+        Test for api.crawl models.
+
+        :return:  nothing as is a test case.
+
+        """
         crawl_request_model = CrawlerRequest(token='testing-token')
         self.assertNotEqual(crawl_request_model, None)
 
     def test_iocs_models(self):
+        """
+        Test for iocs.core models.
+
+        :return:  nothing as is a test case.
+
+        """
         iocs_model = BluelivIOC()
         self.assertNotEqual(iocs_model, None)
 
@@ -107,6 +147,12 @@ class ModelsTests(unittest.TestCase):
         self.assertNotEqual(ioc_request_model, None)
 
     def test_malwares_models(self):
+        """
+        Test for api.malwares models.
+
+        :return:  nothing as is a test case.
+
+        """
         malware_model = BluelivMalware()
         self.assertNotEqual(malware_model, None)
 
@@ -114,6 +160,12 @@ class ModelsTests(unittest.TestCase):
         self.assertNotEqual(malware_request_model, None)
 
     def test_sparks_models(self):
+        """
+        Test for api.sparks models.
+
+        :return:  nothing as is a test case.
+
+        """
         spark_model = Spark()
         self.assertNotEqual(spark_model, None)
 
@@ -121,6 +173,12 @@ class ModelsTests(unittest.TestCase):
         self.assertNotEqual(sparks_request_model, None)
 
     def test_tags_models(self):
+        """
+        Test for api.tags models.
+
+        :return:  nothing as is a test case.
+
+        """
         tag_model = Tag()
         self.assertNotEqual(tag_model, None)
 
@@ -128,6 +186,12 @@ class ModelsTests(unittest.TestCase):
         self.assertNotEqual(tags_request_model, None)
 
     def test_users_models(self):
+        """
+        Test for api.users models.
+
+        :return:  nothing as is a test case.
+
+        """
         user_model = BluelivUser()
         self.assertNotEqual(user_model, None)
 
@@ -136,8 +200,18 @@ class ModelsTests(unittest.TestCase):
 
 
 class RemoteEndpointTests(unittest.TestCase):
+    """
+    Tests oriented to verify the remote API endpoint is working fine.
+
+    """
     @responses.activate
     def test_fake_request_and_response(self):
+        """
+        This is a fake connection test (using responses package).
+
+        :return: nothing as this is a test case.
+
+        """
         if requests is not None and responses is not None:
             responses.add(**{
                 'method': responses.GET,
@@ -154,7 +228,15 @@ class RemoteEndpointTests(unittest.TestCase):
             self.assertEqual(404, response.status_code)
 
     def test_remote_endpoint_is_alive(self):
-        valid_response_status = [200, 401, 400]
+        """
+        This is a real connection test (using requests package). As we don't
+        have a valid token inserted, just testing the response is 200, 400 or
+        401 that will mean the API endpoint is alive.
+
+        :return: nothing as this is a test case.
+
+        """
+        valid_response_status = [200, 400, 401]
         url = '{base}/{users}/{me}'.format(base=BASE_API_URL,
                                            users=BASE_USERS_URL,
                                            me='me')
