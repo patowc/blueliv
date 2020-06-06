@@ -179,6 +179,11 @@ class BluelivRequest(BASERequestModel):
             # Default value for token is None. It is set onto _custom_token
             self._custom_token = kwargs.get('token', None)
 
+        # If category is present in kwargs, we set it.
+        if 'category' in kwargs:
+            # Default value for category is 'core'.
+            self._category = kwargs.get('category', 'core')
+
         # If no _custom_token, we will set the default from configuration.
         # TOKEN may have a value taken from the environment.
         if not self._custom_token:
