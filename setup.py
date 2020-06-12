@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="blueliv-patowc",
+    name="blueliv-api",
     version="1.0.0",
     author="Román Ramírez",
     author_email="rramirez@rootedcon.com",
