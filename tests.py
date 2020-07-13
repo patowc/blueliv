@@ -23,7 +23,7 @@ except ModuleNotFoundError:
     print('- responses not available so we are not using requests tests.')
     responses = None
 
-from api.configuration import (
+from blueliv.configuration import (
     DEBUG, VERSION,
     BASE_API_URL,
     BASE_SEARCH_URL,
@@ -36,13 +36,13 @@ from api.configuration import (
     BASE_MALWARES_URL, BASE_MALWARES_UPLOAD_URL,
     TOKEN, AUTHORIZATION_HEADER, AUTHORIZATION
 )
-from api.core import BASEModel, BASERequestModel, BluelivRequest
-from api.crawl import CrawlerRequest
-from api.iocs import BluelivIOC, IocsRequest
-from api.malwares import BluelivMalware, MalwaresRequest
-from api.sparks import Spark, SparksRequest
-from api.tags import Tag, TagsRequest
-from api.users import BluelivUser, UsersRequest
+from blueliv.core import BASEModel, BASERequestModel, BluelivRequest
+from blueliv.crawl import CrawlerRequest
+from blueliv.iocs import BluelivIOC, IocsRequest
+from blueliv.malwares import BluelivMalware, MalwaresRequest
+from blueliv.sparks import Spark, SparksRequest
+from blueliv.tags import Tag, TagsRequest
+from blueliv.users import BluelivUser, UsersRequest
 
 
 class EnvironmentTests(unittest.TestCase):
@@ -103,7 +103,7 @@ class ModelsTests(unittest.TestCase):
     """
     def test_core_models(self):
         """
-        Test for api.core models.
+        Test for blueliv.core models.
 
         :return:  nothing as is a test case.
 
@@ -125,7 +125,7 @@ class ModelsTests(unittest.TestCase):
 
     def test_crawl_models(self):
         """
-        Test for api.crawl models.
+        Test for blueliv.crawl models.
 
         :return:  nothing as is a test case.
 
@@ -148,7 +148,7 @@ class ModelsTests(unittest.TestCase):
 
     def test_malwares_models(self):
         """
-        Test for api.malwares models.
+        Test for blueliv.malwares models.
 
         :return:  nothing as is a test case.
 
@@ -161,7 +161,7 @@ class ModelsTests(unittest.TestCase):
 
     def test_sparks_models(self):
         """
-        Test for api.sparks models.
+        Test for blueliv.sparks models.
 
         :return:  nothing as is a test case.
 
@@ -174,7 +174,7 @@ class ModelsTests(unittest.TestCase):
 
     def test_tags_models(self):
         """
-        Test for api.tags models.
+        Test for blueliv.tags models.
 
         :return:  nothing as is a test case.
 
@@ -187,7 +187,7 @@ class ModelsTests(unittest.TestCase):
 
     def test_users_models(self):
         """
-        Test for api.users models.
+        Test for blueliv.users models.
 
         :return:  nothing as is a test case.
 
