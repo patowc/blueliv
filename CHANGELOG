@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make a deep review of type hints to make the code more homogeneous
 
 
+## [1.0.2] - 2020-07-14
+
+### Changed
+- Replaced package paths: blueliv.api. -> blueliv
+
+
 ## [1.0.1] - 2020-07-13
 
 ### Added
