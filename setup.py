@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="blueliv-api",
-    version="1.0.1",
+    version="1.0.2",
     author="Román Ramírez",
     author_email="rramirez@rootedcon.com",
     description="Blueliv's API encapsulation",
