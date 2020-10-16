@@ -11,13 +11,13 @@ class CrawlerRequest(BluelivRequest):
     Class to be able to deal with the requests to crawl information.
 
     """
-    term: str = None
+    term: str = ''
     is_text: bool = False
 
     def __init__(self, **kwargs):
         self._category = 'crawl'
         self._base_url = '/crawl'
-        self.term = None
+        self.term = ''
         self.is_text = False
 
         if 'token' in kwargs:
@@ -29,7 +29,7 @@ class CrawlerRequest(BluelivRequest):
             self._base_url = BASE_CRAWL_URL
 
         if 'term' in kwargs:
-            self.term = kwargs.get('term', None)
+            self.term = kwargs.get('term', '')
 
         if 'is_text' in kwargs:
             self.is_text = kwargs.get('is_text', False)
@@ -46,7 +46,7 @@ class CrawlerRequest(BluelivRequest):
                          limit=self.limit,
                          since_id=self.since_id)
 
-    def crawl(self, term: str, is_text: bool = False):
+    def crawl(self, term: str = '', is_text: bool = False):
         """
         Crawl method to search for a term (or url).
 
@@ -54,6 +54,13 @@ class CrawlerRequest(BluelivRequest):
         :param is_text: if it is text, please set to True (otherwise is URL)
         :return:
         """
+
+        if term == '':
+            if self.term == '':
+                raise Exception('crawl: term cannot be an empty string to search')
+            else:
+                term = self.term
+
         data = {
             'url': term,
             'text': is_text
