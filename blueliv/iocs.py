@@ -62,7 +62,7 @@ class BluelivIOC(BASEModel):  # pylint: disable=too-few-public-methods
         super().__init__()
 
 
-class IocsRequest(BluelivRequest):
+class IocsRequest(BluelivRequest):  # pylint: disable=R0902
     """
     Model to be able to deal with IoC requests.
 
