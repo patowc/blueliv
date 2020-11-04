@@ -5,11 +5,11 @@ We can search using the API and by term, tag or other parameters.
 
 """
 import typing
-from .configuration import (
+from .configuration import (  # pylint: disable=E0401
     BASE_SPARKS_URL, BASE_SPARKS_TIMELINE_URL, BASE_SPARKS_DISCOVER_URL
 )
 
-from .core import BASEModel, BluelivRequest
+from .core import BASEModel, BluelivRequest  # pylint: disable=E0401
 
 
 class Spark(BASEModel):  # pylint: disable=too-few-public-methods
