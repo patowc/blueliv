@@ -380,6 +380,12 @@ class BluelivRequest(BASERequestModel):
 
             raise Exception('[%s]: Error request [400]: %s' % (url,
                                                                res.content))
+        elif res.status_code == 401:
+            if DEBUG is True:
+                print('request RESULT STATUS [401]. ERROR (maybe not properly authenticated).')
+
+            raise Exception('[%s]: Error request [401]: %s (authentication/API key?)' % (url,
+                                                                                         res.content))
         elif res.status_code == 422:
             if DEBUG is True:
                 print('request RESULT STATUS [422]. ERROR.')
@@ -390,6 +396,7 @@ class BluelivRequest(BASERequestModel):
         if DEBUG is True:
             print('request STATUS [%d]. UNEXPECTED.' % res.status_code)
 
+        # Unhandled exception or error code not managed.
         raise Exception('[%s]: Exception code [%d]' % (url,
                                                        res.status_code))
 
