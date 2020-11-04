@@ -222,7 +222,7 @@ class BluelivRequest(BASERequestModel):
         """
         return self._category
 
-    def request(self, **kwargs):
+    def request(self, **kwargs):  # pylint: disable=R0912, R0915
         """
         Request method is the base method to be able to retrieve from Blueliv
         endpoint in the API.
@@ -364,7 +364,7 @@ class BluelivRequest(BASERequestModel):
                                             params=params,
                                             data=data)
 
-        if res.status_code == 200:
+        if res.status_code == 200:  # pylint: disable=R1705
             if DEBUG is True:
                 print('request RESULT STATUS [200]. OK.')
 
