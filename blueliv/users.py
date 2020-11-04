@@ -4,11 +4,11 @@ Module to get information about users, including self.
 """
 import typing
 
-from .configuration import (
+from .configuration import (  # pylint: disable=E0401
     BASE_USERS_URL
 )
 
-from .core import BASEModel, BluelivRequest
+from .core import BASEModel, BluelivRequest  # pylint: disable=E0401
 
 
 class BluelivUser(BASEModel):  # pylint: disable=too-few-public-methods
