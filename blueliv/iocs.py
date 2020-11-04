@@ -4,11 +4,11 @@ Module to deal and manage IoCs.
 """
 import typing
 
-from .configuration import (
+from .configuration import (  # pylint: disable=E0401
     BASE_IOCS_URL, BASE_IOCS_TIMELINE_URL, BASE_IOCS_DISCOVER_URL
 )
 
-from .core import BASEModel, BluelivRequest
+from .core import BASEModel, BluelivRequest  # pylint: disable=E0401
 
 
 BluelivIOCTypes = (
