@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="blueliv-api",
-    version="1.0.3",
+    version="1.0.4",
     author="Román Ramírez",
     author_email="rramirez@rootedcon.com",
     description="Blueliv's API encapsulation",
@@ -17,6 +17,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/patowc/blueliv",
     packages=setuptools.find_packages(),
+    install_requires=[
+        'requests',
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
