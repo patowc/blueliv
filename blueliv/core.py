@@ -384,8 +384,12 @@ class BluelivRequest(BASERequestModel):
             if DEBUG is True:
                 print('request RESULT STATUS [401]. ERROR (maybe not properly authenticated).')
 
-            raise Exception('[%s]: Error request [401]: %s (authentication/API key?)' % (url,
-                                                                                         res.content))
+            base_exception = '[%s]: Error request [401]: ' % url
+            error_401_authentication = '(authentication/API key?)'
+
+            raise Exception('%s%s %s' % (base_exception,
+                                         error_401_authentication,
+                                         res.content))
         elif res.status_code == 422:
             if DEBUG is True:
                 print('request RESULT STATUS [422]. ERROR.')
