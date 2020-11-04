@@ -58,8 +58,7 @@ class CrawlerRequest(BluelivRequest):
         if term == '':
             if self.term == '':
                 raise Exception('crawl: term cannot be an empty string to search')
-            else:
-                term = self.term
+            term = self.term
 
         data = {
             'url': term,
